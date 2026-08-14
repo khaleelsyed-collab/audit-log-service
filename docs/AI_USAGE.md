@@ -484,3 +484,15 @@ Implement a read-only audit export feature that returns all audit records ordere
 ### AI Suggestions Rejected
 
 - None.
+
+## Commit 16 – Audit Statistics Feature
+
+### AI Assistance
+
+GitHub Copilot was used to generate the initial implementation for:
+
+- AuditStatisticsService
+- AuditStatisticsController
+- AuditStatisticsResponse
+
+The generated code was manually reviewed, compiled, tested, and refined before being committed.

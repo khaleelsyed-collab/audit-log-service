@@ -35,6 +35,21 @@ public interface AuditRecordRepository
     List<AuditRecord> findByTimestampLessThanEqualAndArchivedFalse(java.time.Instant cutoff);
 
     /**
+     * Count of non-archived records.
+     */
+    long countByArchivedFalse();
+
+    /**
+     * Count of archived records.
+     */
+    long countByArchivedTrue();
+
+    /**
+     * Find the first (earliest) record by sequence number.
+     */
+    java.util.Optional<AuditRecord> findTopByOrderBySequenceNumberAsc();
+
+    /**
      * Retrieve all records for a given actor ordered by sequenceNumber ascending.
      * Useful for actor-scoped exports or verification across a single actor's events.
      */

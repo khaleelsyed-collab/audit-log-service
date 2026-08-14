@@ -400,3 +400,14 @@ GET /audit/export
 
 - Verified audit records were returned in sequence order.
 - Verified internal fields (`id`, `archived`, `archivedAt`, `redactedPayload`) are not exposed.
+
+### Commit 16 – Audit Statistics Feature
+
+The Audit Statistics feature was implemented with AI-assisted code generation.
+
+Manual verification included:
+
+- Source code review
+- Successful Maven build
+- Endpoint testing
+- Validation of repository queries
