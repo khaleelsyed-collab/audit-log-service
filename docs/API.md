@@ -112,3 +112,24 @@ Returns
 - latestSequenceNumber
 - firstRecordTimestamp
 - lastRecordTimestamp
+
+## Search Audit Records
+
+### Endpoint
+
+GET /audit/search
+
+### Query Parameters (optional)
+
+- actorId
+- eventType
+- resourceType
+- resourceId
+
+### Example
+
+GET /audit/search?actorId=admin
+
+### Response
+
+Returns audit records matching the supplied filters, ordered by sequenceNumber.

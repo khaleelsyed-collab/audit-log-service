@@ -411,3 +411,21 @@ Manual verification included:
 - Successful Maven build
 - Endpoint testing
 - Validation of repository queries
+
+### Commit 17
+
+**AI Prompt Used:**
+Implemented a dynamic audit search endpoint using Spring Data JPA Specifications with optional filters (actorId, eventType, resourceType, resourceId), ordered by sequenceNumber, and returned results using a response DTO.
+
+**AI Response:**
+Generated:
+- AuditSearchController
+- AuditSearchService
+- AuditSearchResponse DTO
+- Reused existing AuditRecordSpecification for filtering.
+
+**Engineer Validation:**
+- Reviewed generated code.
+- Verified filtering by actorId, eventType, resourceType, and resourceId.
+- Tested combined filters and empty results.
+- Confirmed results are ordered by sequenceNumber.

@@ -496,3 +496,14 @@ GitHub Copilot was used to generate the initial implementation for:
 - AuditStatisticsResponse
 
 The generated code was manually reviewed, compiled, tested, and refined before being committed.
+
+### Commit 17
+### Audit Search
+
+GitHub Copilot assisted with:
+
+- AuditSearchService
+- AuditSearchController
+- AuditSearchResponse DTO
+
+The generated code was reviewed, compiled, manually tested, and adjusted before committing.
