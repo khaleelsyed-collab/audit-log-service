@@ -80,3 +80,35 @@ Rejected:
 - **Modified:** Simplified documentation and aligned it with the implementation roadmap.
 - **Rejected:** Checkpoint optimization and implementation details beyond the current scope.
 - **Validated:** Cross-checked with the assessment requirements.
+
+## Commit 4 – AuditRecord Domain Model
+
+**Purpose**
+Implement the immutable `AuditRecord` entity.
+
+**AI Tool**
+GitHub Copilot Agent 
+
+**Prompt**
+Generate a JPA entity for immutable audit records using Spring Data JPA.
+
+**Accepted**
+- Entity structure
+- Field definitions
+- JPA annotations
+
+**Modified**
+- Package structure
+- Column constraints
+- Hash length
+- Sequence number type
+
+**Rejected**
+- Repository generation
+- Service generation
+- Business logic
+
+**Validation**
+- Executed `mvn clean test`.
+- Application started successfully.
+- Manual review completed.

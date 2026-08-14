@@ -103,3 +103,39 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 
 **Validation**
 - Reviewed against the assignment requirements.
+
+## Commit 4 – AuditRecord Domain Model
+
+**Objective**
+- Implemented the immutable `AuditRecord` JPA entity.
+
+**AI Tool**
+- GitHub Copilot Agent
+- 
+**AI Prompt**
+- Requested generation of an immutable JPA entity for audit records using Spring Data JPA.
+
+**Engineer Review**
+
+**Accepted**
+- Entity structure
+- JPA annotations
+- Constructors
+- Getter-only design
+
+**Modified**
+- Moved entity to the `entity` package.
+- Changed `sequenceNumber` to `Long`.
+- Added `unique = true` for `sequenceNumber`.
+- Updated hash column length to 64 characters.
+
+**Rejected**
+- Repository, service, and business logic generation.
+
+**Validation**
+- Project compiled successfully using `mvn clean test`.
+- Spring Boot application started successfully.
+- Entity reviewed against the architecture and requirement documents.
+
+**Engineer Sign-off**
+- Reviewed and approved for commit.
