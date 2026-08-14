@@ -222,3 +222,27 @@ Reviewed and validated:
     - Filtering by actorId
     - Filtering by eventType
     - Pagination
+
+## Commit 9 – Hash Chain Verification
+
+### Task
+Implement the chain verification endpoint required by Scenario A.
+
+### AI Assistance
+GitHub Copilot generated the initial implementation for:
+
+- AuditVerificationService
+- ChainVerificationResponse DTO
+- AuditVerificationController
+
+### Human Review
+The generated code was reviewed and validated.
+
+A timestamp precision issue was discovered during testing because PostgreSQL stores timestamps with microsecond precision while Java `Instant.now()` provides nanosecond precision.
+
+The implementation was corrected by truncating timestamps before hashing:
+
+```java
+Instant effectiveTimestamp =
+        (timestamp == null ? Instant.now() : timestamp)
+                .truncatedTo(ChronoUnit.MICROS);

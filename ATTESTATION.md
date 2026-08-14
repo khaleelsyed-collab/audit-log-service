@@ -172,3 +172,30 @@ Changes:
 - Implemented GET /audit endpoint.
 - Added search response DTO excluding payload for security.
 - Supports filtering by actorId, resourceType, resourceId, eventType, and timestamp range.
+
+## Commit 9 – Audit Chain Verification Endpoint
+
+### AI Assistance
+- Used GitHub Copilot to scaffold the verification service, response DTO, and REST controller.
+- AI-generated code was manually reviewed and refined before acceptance.
+
+### Human Contribution
+- Reviewed the verification algorithm.
+- Fixed timestamp precision mismatch causing hash verification failures by truncating timestamps to microsecond precision before hashing.
+- Verified canonical string generation.
+- Tested hash recomputation against persisted records.
+- Validated successful chain verification using the `/audit/verify` endpoint.
+- Removed temporary debugging statements after verification.
+
+### Verification Performed
+- Created a new audit record.
+- Invoked `GET /audit/verify`.
+- Confirmed the response:
+
+```json
+{
+  "chainIntact": true,
+  "firstBrokenSequence": null,
+  "violation": null,
+  "message": "Chain intact"
+}

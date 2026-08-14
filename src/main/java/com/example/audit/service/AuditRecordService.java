@@ -10,6 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.Instant;
 import java.util.Optional;
 
+import java.time.temporal.ChronoUnit;
 import com.example.audit.util.CanonicalRecordUtil;
 
 /**
@@ -58,7 +59,9 @@ public class AuditRecordService {
                                     String resourceId,
                                     String payload,
                                     Instant timestamp) {
-        Instant effectiveTimestamp = (timestamp == null) ? Instant.now() : timestamp;
+        Instant effectiveTimestamp =
+                (timestamp == null ? Instant.now() : timestamp)
+                        .truncatedTo(ChronoUnit.MICROS);
 
         // Determine next sequence number and previous hash atomically (within transaction)
         Optional<AuditRecord> latestOpt = repository.findTopByOrderBySequenceNumberDesc();
@@ -71,6 +74,7 @@ public class AuditRecordService {
         String canonical = CanonicalRecordUtil.buildCanonicalString(eventType, actorId, resourceType, resourceId, payload, effectiveTimestamp, nextSequence, previousHash);
 
         String currentHash = HashUtil.sha256Hex(canonical);
+
 
         AuditRecord record = new AuditRecord(
                 eventType,
