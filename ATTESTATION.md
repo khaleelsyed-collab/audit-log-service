@@ -234,3 +234,38 @@ POST /audit/archive
   "archivedRecords": 0,
   "message": "Retention policy executed successfully"
 }
+```
+
+## Commit 11 – Structured Redaction
+
+### Engineer Changes
+
+Implemented structured payload redaction while preserving audit chain integrity.
+
+Changes include:
+- Added `redactedPayload` field to store a sanitized copy of the payload.
+- Implemented `AuditRedactionService` to redact selected top-level JSON fields.
+- Added `POST /audit/redact/{id}` endpoint.
+- Original payload, hash, previousHash and sequence number remain unchanged.
+- Verification endpoint continues validating the original audit chain.
+
+### Testing Performed
+
+- Created an audit record.
+- Executed:
+
+POST /audit/redact/{id}
+
+- Verified selected fields were masked.
+- Verified original payload remained unchanged.
+- Executed:
+
+GET /audit/verify
+
+- Verified response:
+
+```json
+{
+  "chainIntact": true,
+  "message": "Chain intact"
+}

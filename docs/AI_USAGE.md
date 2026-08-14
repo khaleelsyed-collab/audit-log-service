@@ -307,3 +307,29 @@ Result:
 
 Accepted with manual review and testing.
 
+## Commit 11 – Structured Redaction
+
+**AI Tool Used**
+- GitHub Copilot
+- ChatGPT
+
+**Prompt Used**
+Implement structured redaction for audit records by masking selected top-level JSON fields while preserving the original payload and hash chain.
+
+**AI Suggestions Considered**
+- Store a separate `redactedPayload`.
+- Create a dedicated redaction service.
+- Expose a REST endpoint for redaction.
+- Use Jackson for JSON processing.
+
+**Engineer Modifications**
+- Changed masking value to `"********"`.
+- Fixed Jackson imports to match the project.
+- Added required validation dependency.
+- Corrected Maven dependencies and build issues.
+- Verified hash chain remains intact after redaction.
+
+**Suggestions Rejected**
+- Recomputing audit hashes after redaction.
+- Modifying the original payload.
+- Redacting nested JSON fields.

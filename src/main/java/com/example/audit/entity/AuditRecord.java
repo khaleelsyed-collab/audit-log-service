@@ -53,6 +53,9 @@ public class AuditRecord {
     @Column
     private Instant archivedAt;
 
+    @Column(columnDefinition = "TEXT")
+    private String redactedPayload;
+
     // Protected no-arg constructor required by JPA; visibility keeps entity effectively immutable for callers
     protected AuditRecord() {
     }
@@ -78,6 +81,7 @@ public class AuditRecord {
         this.hash = hash;
         this.archived = false;
         this.archivedAt = null;
+        this.redactedPayload = null;
     }
 
     // Getters and limited setters for archival behavior
@@ -135,5 +139,13 @@ public class AuditRecord {
 
     public void setArchivedAt(Instant archivedAt) {
         this.archivedAt = archivedAt;
+    }
+
+    public String getRedactedPayload() {
+        return redactedPayload;
+    }
+
+    public void setRedactedPayload(String redactedPayload) {
+        this.redactedPayload = redactedPayload;
     }
 }
