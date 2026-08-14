@@ -139,3 +139,11 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 
 **Engineer Sign-off**
 - Reviewed and approved for commit.
+
+## Commit 5 – AuditRecord Repository
+
+- Added the `AuditRecordRepository` using Spring Data JPA.
+- AI generated an initial repository interface with additional query methods.
+- I reviewed the implementation, removed repository methods not required at this stage, and retained only the methods supporting append operations and chain verification.
+- I verified the repository aligns with the current implementation plan and follows incremental development.
+- I reviewed the generated repository, corrected the entity import to match the project's package structure, removed repository methods not required at this stage, and retained only the methods supporting append operations and chain verification.

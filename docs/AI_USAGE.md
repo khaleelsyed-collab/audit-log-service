@@ -112,3 +112,33 @@ Generate a JPA entity for immutable audit records using Spring Data JPA.
 - Executed `mvn clean test`.
 - Application started successfully.
 - Manual review completed.
+
+## Commit 5 – AuditRecord Repository
+
+### Intent
+Introduce the persistence layer for the `AuditRecord` entity.
+
+### Constraints
+- Use Spring Data JPA.
+- Support only the current implementation stage.
+- Avoid unnecessary repository methods.
+
+### Acceptance Criteria
+- Repository compiles successfully.
+- Supports append operations.
+- Supports future chain verification.
+
+### AI Prompt
+Requested implementation of the persistence layer for the existing `AuditRecord` entity using Spring Data JPA.
+
+### AI Response Summary
+Generated a repository interface extending `JpaRepository` with multiple derived query methods.
+
+### Human Review
+- Corrected the generated `AuditRecord` import to use the project's `entity` package.
+- Removed repository methods that were not required for the current implementation stage.
+- Retained only the repository methods supporting append operations and future chain verification.
+
+### Validation
+- Repository compiled successfully.
+- Confirmed compatibility with the existing entity.
