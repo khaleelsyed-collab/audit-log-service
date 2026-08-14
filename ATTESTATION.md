@@ -48,28 +48,58 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 ## Commit 2 – Requirement Analysis
 
 **Objective**
-- Reviewed the assessment requirements and prepared an incremental implementation plan.
+- Reviewed the assessment requirements and prepared an implementation roadmap.
 
 **AI Tool**
 - GitHub Copilot Agent
 - ChatGPT
 
 **AI Prompt**
-- Requested a concise requirement analysis and implementation roadmap for the Audit Log Service assessment.
+- Requested a concise requirement analysis and incremental implementation plan.
 
 **Engineer Review**
 
 **Accepted**
-- Functional and non-functional requirement summary.
+- Requirement summary.
 - Implementation roadmap.
-- Assumptions and constraints.
 
 **Modified**
-- Simplified the implementation roadmap.
-- Reorganized tasks for incremental commits.
+- Simplified the roadmap.
+- Reordered implementation tasks.
 
 **Rejected**
-- Extension ideas beyond the assessment scope.
+- Suggestions beyond the assessment scope.
 
 **Validation**
-- Reviewed against the assessment document before implementation.
+- Reviewed against the assessment document.
+
+## Commit 3 – Architecture Overview
+
+**Objective**
+- Designed the application architecture before implementation.
+
+**AI Tool**
+- GitHub Copilot Agent
+- ChatGPT
+
+**AI Prompt**
+- Requested a concise architecture overview covering components, APIs, data model, hash chain, and engineering decisions.
+
+**Engineer Review**
+
+**Accepted**
+- High-level architecture.
+- Component responsibilities.
+- API overview.
+- Hash chain design.
+- Engineering decisions.
+
+**Modified**
+- Simplified architecture documentation.
+- Removed implementation details planned for later commits.
+
+**Rejected**
+- Checkpoint optimization and implementation-specific recommendations outside the current scope.
+
+**Validation**
+- Reviewed against the assignment requirements.

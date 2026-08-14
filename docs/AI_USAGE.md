@@ -69,3 +69,14 @@ Rejected:
 - **Modified:** Simplified and reordered implementation tasks.
 - **Rejected:** Features and recommendations beyond the assignment scope.
 - **Validated:** Cross-checked with the assessment document.
+
+
+## Commit 3 – Architecture Overview
+
+- **Purpose:** Design the system architecture before implementation.
+- **AI Tool:** GitHub Copilot Agent + ChatGPT
+- **Prompt:** Create a concise architecture overview for the Audit Log Service.
+- **Accepted:** Architecture, components, APIs, data model, and hash chain design.
+- **Modified:** Simplified documentation and aligned it with the implementation roadmap.
+- **Rejected:** Checkpoint optimization and implementation details beyond the current scope.
+- **Validated:** Cross-checked with the assessment requirements.
