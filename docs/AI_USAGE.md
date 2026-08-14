@@ -507,3 +507,16 @@ GitHub Copilot assisted with:
 - AuditSearchResponse DTO
 
 The generated code was reviewed, compiled, manually tested, and adjusted before committing.
+
+### Commit 18 - Export Bundle
+
+**Prompt**
+
+> Implement a verifiable audit export bundle supporting optional actor and resource filters. Reuse the existing Merkle tree implementation and preserve existing verification behavior.
+
+**Engineer Review**
+
+- Verified exported records remain ordered by sequence number.
+- Verified actor and resource filters.
+- Verified bundle includes first/last hashes and Merkle root.
+- Confirmed read-only implementation.

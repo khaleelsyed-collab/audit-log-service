@@ -1,11 +1,13 @@
 package com.example.audit.controller;
 
+import com.example.audit.controller.ExportBundleResponse;
 import com.example.audit.service.AuditExportService;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
 import java.util.List;
 
 /**
@@ -27,9 +29,17 @@ public class AuditExportController {
      * Returns all audit records ordered by sequenceNumber as export-friendly DTOs.
      * This endpoint is read-only and does not modify any data.
      */
+
     @GetMapping("/export")
-    public ResponseEntity<List<ExportRecordResponse>> exportAll() {
-        List<ExportRecordResponse> list = exportService.exportAll();
-        return ResponseEntity.ok(list);
+    public ResponseEntity<ExportBundleResponse> exportAll(
+            @RequestParam(required = false) String actorId,
+            @RequestParam(required = false) String resourceType,
+            @RequestParam(required = false) String resourceId
+    ) {
+
+        ExportBundleResponse bundle =
+                exportService.export(actorId, resourceType, resourceId);
+
+        return ResponseEntity.ok(bundle);
     }
 }

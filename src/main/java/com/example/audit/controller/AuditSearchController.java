@@ -1,13 +1,15 @@
 package com.example.audit.controller;
 
 import com.example.audit.service.AuditSearchService;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * Controller exposing search APIs for audit records.
@@ -26,16 +28,22 @@ public class AuditSearchController {
      * GET /audit/search
      *
      * Supports optional filters: actorId, eventType, resourceType, resourceId.
-     * Returns results ordered by sequenceNumber ascending.
+     * Pagination and sorting supported via page, size, sortBy and direction parameters.
      */
     @GetMapping("/search")
-    public ResponseEntity<List<AuditSearchResponse>> search(
+    public ResponseEntity<Page<AuditSearchResponse>> search(
             @RequestParam(value = "actorId", required = false) String actorId,
             @RequestParam(value = "eventType", required = false) String eventType,
             @RequestParam(value = "resourceType", required = false) String resourceType,
-            @RequestParam(value = "resourceId", required = false) String resourceId
+            @RequestParam(value = "resourceId", required = false) String resourceId,
+            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
+            @RequestParam(value = "sortBy", required = false, defaultValue = "sequenceNumber") String sortBy,
+            @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction
     ) {
-        List<AuditSearchResponse> results = searchService.search(actorId, eventType, resourceType, resourceId);
+        Sort.Direction dir = Sort.Direction.fromString(direction);
+        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sortBy));
+        Page<AuditSearchResponse> results = searchService.search(actorId, eventType, resourceType, resourceId, pageable);
         return ResponseEntity.ok(results);
     }
 }

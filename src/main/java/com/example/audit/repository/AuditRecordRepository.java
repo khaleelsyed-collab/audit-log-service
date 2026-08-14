@@ -53,11 +53,18 @@ public interface AuditRecordRepository
      * Retrieve all records for a given actor ordered by sequenceNumber ascending.
      * Useful for actor-scoped exports or verification across a single actor's events.
      */
-  //  List<AuditRecord> findByActorIdOrderBySequenceNumberAsc(String actorId);
+  List<AuditRecord> findByActorIdOrderBySequenceNumberAsc(String actorId);
 
     /**
-     * Retrieve all records for a specific resource (type+id) ordered by sequenceNumber ascending.
-     * Useful for resource-scoped exports or verification.
-     */
+   * Retrieve all records for a specific resource id ordered by sequenceNumber ascending.
+   */
+    List<AuditRecord> findByResourceTypeAndResourceIdOrderBySequenceNumberAsc(
+            String resourceType,
+            String resourceId);
+
+  /**
+   * Retrieve all records for a specific resource (type+id) ordered by sequenceNumber ascending.
+   * Useful for resource-scoped exports or verification.
+   */
   //  List<AuditRecord> findByResourceTypeAndResourceIdOrderBySequenceNumberAsc(String resourceType, String resourceId);
 }

@@ -133,3 +133,17 @@ GET /audit/search?actorId=admin
 ### Response
 
 Returns audit records matching the supplied filters, ordered by sequenceNumber.
+
+## Export Audit Bundle
+
+### GET /audit/export
+
+Exports audit records together with verification metadata.
+
+### Query Parameters
+
+| Parameter | Required | Description |
+|-----------|----------|-------------|
+| actorId | No | Export records for an actor |
+| resourceType | No | Resource type filter |
+| resourceId | No | Resource id filter |

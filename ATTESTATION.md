@@ -429,3 +429,21 @@ Generated:
 - Verified filtering by actorId, eventType, resourceType, and resourceId.
 - Tested combined filters and empty results.
 - Confirmed results are ordered by sequenceNumber.
+
+### Commit 18 - Export Bundle
+## Feature: Verifiable Export Bundle
+
+Implemented a verifiable export bundle for audit records.
+
+Features:
+- Export all audit records or filter by actorId or resourceType + resourceId.
+- Includes chain metadata:
+    - First sequence
+    - Last sequence
+    - First hash
+    - Last hash
+    - Merkle root
+    - Generated timestamp
+- Export preserves sequence order.
+- Merkle root is generated from exported record hashes.
+- Read-only implementation with no impact to existing hash-chain verification.

@@ -42,12 +42,27 @@ public class MerkleTreeService {
         }
 
         // Initialize leaves as the stored hash values
-        List<String> layer = new ArrayList<>(total);
+        List<String> leaves = new ArrayList<>(total);
         for (AuditRecord r : records) {
-            layer.add(r.getHash());
+            leaves.add(r.getHash());
         }
 
-        // Build tree upward until a single root remains
+        String merkleRoot = computeMerkleRootFromHashes(leaves);
+        return new com.example.audit.controller.MerkleRootResponse(total, merkleRoot, generatedAt);
+    }
+
+    /**
+     * Compute Merkle root given a list of hex-encoded hash strings.
+     * If the list is empty returns empty string.
+     *
+     * @param hashes list of hex-encoded hash strings
+     * @return merkle root hex string
+     */
+    public String computeMerkleRootFromHashes(List<String> hashes) {
+        if (hashes == null || hashes.isEmpty()) {
+            return "";
+        }
+        List<String> layer = new ArrayList<>(hashes);
         while (layer.size() > 1) {
             List<String> nextLayer = new ArrayList<>((layer.size() + 1) / 2);
             int i = 0;
@@ -61,8 +76,6 @@ public class MerkleTreeService {
             }
             layer = nextLayer;
         }
-
-        String merkleRoot = layer.get(0);
-        return new com.example.audit.controller.MerkleRootResponse(total, merkleRoot, generatedAt);
+        return layer.get(0);
     }
 }
