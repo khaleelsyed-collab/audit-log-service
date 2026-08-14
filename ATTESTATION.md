@@ -43,3 +43,33 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 - Application starts successfully.
 - Maven project builds successfully.
 - Repository baseline verified.
+
+
+## Commit 2 – Requirement Analysis
+
+**Objective**
+- Reviewed the assessment requirements and prepared an incremental implementation plan.
+
+**AI Tool**
+- GitHub Copilot Agent
+- ChatGPT
+
+**AI Prompt**
+- Requested a concise requirement analysis and implementation roadmap for the Audit Log Service assessment.
+
+**Engineer Review**
+
+**Accepted**
+- Functional and non-functional requirement summary.
+- Implementation roadmap.
+- Assumptions and constraints.
+
+**Modified**
+- Simplified the implementation roadmap.
+- Reorganized tasks for incremental commits.
+
+**Rejected**
+- Extension ideas beyond the assessment scope.
+
+**Validation**
+- Reviewed against the assessment document before implementation.

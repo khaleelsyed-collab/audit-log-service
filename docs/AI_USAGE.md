@@ -59,3 +59,13 @@ Rejected:
 - Application starts successfully.
 - Project structure verified.
 - Documentation reviewed.
+
+## Commit 2 – Requirement Analysis
+
+- **Purpose:** Analyze assessment requirements and create an implementation roadmap.
+- **AI Tool:** GitHub Copilot Agent + ChatGPT
+- **Prompt:** Review the assessment and prepare an incremental implementation plan without generating code.
+- **Accepted:** Requirement summary, assumptions, constraints, and roadmap.
+- **Modified:** Simplified and reordered implementation tasks.
+- **Rejected:** Features and recommendations beyond the assignment scope.
+- **Validated:** Cross-checked with the assessment document.
