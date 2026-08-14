@@ -333,3 +333,50 @@ Implement structured redaction for audit records by masking selected top-level J
 - Recomputing audit hashes after redaction.
 - Modifying the original payload.
 - Redacting nested JSON fields.
+
+## AI Prompt Used
+
+```
+Implement a read-only payload retrieval API.
+
+Requirements:
+- Add GET /audit/{id}/payload endpoint.
+- Support optional query parameter redacted=true.
+- Return redactedPayload if available, otherwise original payload.
+- Do not modify payload, hash or previousHash.
+- Keep verification logic unchanged.
+- Use service layer and DTOs.
+```
+
+
+## Commit 12 – Payload Retrieval API
+---
+
+## AI Tool Used
+
+GitHub Copilot
+
+---
+
+## AI Suggestions
+
+### Considered
+
+- Added a dedicated service layer for payload retrieval.
+- Created separate controller and response DTO.
+- Used optional `redacted=true` query parameter.
+- Used constructor injection.
+
+### Modified
+
+- Simplified controller implementation.
+- Verified endpoint behavior manually.
+- Updated project documentation.
+- Ensured project coding conventions were followed.
+
+### Rejected
+
+- Returning entity objects directly.
+- Modifying the original payload.
+- Recomputing hashes after redaction.
+- Changing existing verification logic.

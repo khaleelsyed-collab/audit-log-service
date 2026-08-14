@@ -269,3 +269,43 @@ GET /audit/verify
   "chainIntact": true,
   "message": "Chain intact"
 }
+
+```
+
+## Commit 12 – Payload Retrieval API
+
+### Engineer Changes
+
+Implemented a read-only payload retrieval API that supports returning either the original audit payload or a previously redacted payload without modifying immutable audit records.
+
+Changes include:
+
+- Added `AuditPayloadViewService` for payload retrieval.
+- Added `AuditPayloadController`.
+- Added `PayloadResponse` DTO.
+- Added `GET /audit/{id}/payload` endpoint.
+- Added optional `redacted=true` query parameter.
+- Returns the redacted payload when available; otherwise returns the original payload.
+- Original payload, hash, previousHash, and verification logic remain unchanged.
+
+### Testing Performed
+
+- Started the application successfully.
+- Verified:
+
+```http
+GET /audit/1/payload
+```
+
+Returns the original payload.
+
+- Verified:
+
+```http
+GET /audit/1/payload?redacted=true
+```
+
+Returns the redacted payload when available.
+
+- Confirmed original payload remains unchanged.
+- Confirmed audit verification continues to succeed.
