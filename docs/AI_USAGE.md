@@ -456,3 +456,31 @@ Implement verification for a single audit record by recomputing its hash and exp
 ### AI Suggestions Rejected
 
 - None.
+
+## Commit 15 – Audit Record Export
+
+### AI Tool Used
+
+GitHub Copilot
+
+### AI Prompt
+
+Implement a read-only audit export feature that returns all audit records ordered by sequence number. Use a DTO instead of exposing the entity directly and do not expose internal database fields.
+
+### AI Suggestions Accepted
+
+- Generated export service.
+- Generated export controller.
+- Generated response DTO.
+- Ordered records by sequence number.
+
+### Engineer Modifications
+
+- Reviewed generated implementation.
+- Simplified DTO imports.
+- Verified exported fields.
+- Performed end-to-end testing.
+
+### AI Suggestions Rejected
+
+- None.

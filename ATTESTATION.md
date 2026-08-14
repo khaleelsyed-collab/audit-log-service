@@ -373,3 +373,30 @@ GET /audit/verify/1
 ```
 
 - Verified stored hash matches recomputed hash.
+
+## Commit 15 – Audit Record Export
+
+### Engineer Changes
+
+Implemented a read-only audit export feature.
+
+Changes include:
+
+- Added `AuditExportService`.
+- Added `ExportRecordResponse` DTO.
+- Added `GET /audit/export` endpoint.
+- Returns all audit records ordered by sequence number.
+- Exposes only export-related fields.
+- Internal database fields are excluded.
+- Existing audit records remain unchanged.
+
+### Testing Performed
+
+- Started the application successfully.
+- Verified existing APIs continue to work.
+- Called:
+
+GET /audit/export
+
+- Verified audit records were returned in sequence order.
+- Verified internal fields (`id`, `archived`, `archivedAt`, `redactedPayload`) are not exposed.
