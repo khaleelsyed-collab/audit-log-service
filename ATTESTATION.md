@@ -340,3 +340,36 @@ Successfully verified:
 - `GET /audit/merkle/root`
 
 Confirmed that the Merkle Root is generated successfully without modifying existing audit records.
+
+## Commit 14 – Single Record Verification
+
+### Engineer Changes
+
+Implemented verification for an individual audit record.
+
+Changes include:
+
+- Added `AuditRecordVerificationService`.
+- Recomputes the hash for a selected audit record.
+- Compares computed hash with stored hash.
+- Added `GET /audit/verify/{id}` endpoint.
+- Returns verification status together with stored and computed hashes.
+- Existing audit records remain unchanged.
+
+### Testing Performed
+
+- Started the application successfully.
+- Verified existing APIs continue to work.
+- Called:
+
+GET /audit/verify/1
+
+- Verified response contains:
+
+```json
+{
+  "valid": true
+}
+```
+
+- Verified stored hash matches recomputed hash.

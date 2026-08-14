@@ -428,3 +428,31 @@ GitHub Copilot
 - Updating audit records during Merkle generation.
 - Recomputing existing record hashes.
 - Changing audit verification logic.
+
+## Commit 14 – Single Record Verification
+
+### AI Tool Used
+
+GitHub Copilot
+
+### AI Prompt
+
+Implement verification for a single audit record by recomputing its hash and exposing a REST endpoint. Do not modify existing verification logic or stored audit records.
+
+### AI Suggestions Accepted
+
+- Generated verification service.
+- Generated verification controller.
+- Generated response DTO.
+- Used existing hashing utilities.
+
+### Engineer Modifications
+
+- Reviewed generated implementation.
+- Verified canonical hash computation.
+- Ensured existing APIs continued working.
+- Performed end-to-end testing.
+
+### AI Suggestions Rejected
+
+- None.
