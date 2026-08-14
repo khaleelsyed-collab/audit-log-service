@@ -160,3 +160,15 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 - Added CanonicalRecordUtil to build deterministic canonical strings for hashing.
 - Configured a genesis hash value for the first record in the chain.
 - Reviewed and refined the AI-generated implementation before committing.
+
+## Commit 8 - Audit Search API
+
+Implemented a search API for audit records with optional filtering and pagination.
+
+Changes:
+- Added JPA Specifications for dynamic filtering.
+- Extended repository with JpaSpecificationExecutor.
+- Added search service method.
+- Implemented GET /audit endpoint.
+- Added search response DTO excluding payload for security.
+- Supports filtering by actorId, resourceType, resourceId, eventType, and timestamp range.

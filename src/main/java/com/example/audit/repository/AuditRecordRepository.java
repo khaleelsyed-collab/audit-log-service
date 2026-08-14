@@ -15,7 +15,7 @@ import java.util.Optional;
  * JpaSpecificationExecutor in the service layer as needed.
  */
 public interface AuditRecordRepository
-        extends JpaRepository<AuditRecord, Long> {
+        extends JpaRepository<AuditRecord, Long>, JpaSpecificationExecutor<AuditRecord> {
 
     /**
      * Find the latest persisted record by sequenceNumber.

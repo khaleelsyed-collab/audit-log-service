@@ -189,3 +189,36 @@ Generated AuditRecordService and later refactored canonical string generation in
 - Extracted canonical string generation into a reusable utility.
 - Verified package structure and imports.
 - Confirmed transactional behavior and hash-chain logic.
+
+## Validation
+
+- Project builds successfully using `./mvnw clean test`.
+- Reviewed generated code before committing.
+- Refactored generated code where needed to improve readability and maintainability.
+
+## Commit 8 - Search API
+
+### AI Assistance
+AI was used to:
+- Generate the initial structure for JPA Specification.
+- Suggest repository integration with JpaSpecificationExecutor.
+- Generate boilerplate DTO classes.
+- Draft controller and service implementations.
+
+### Developer Review
+Reviewed and validated:
+- Specification predicates.
+- Service-layer separation.
+- Controller request mapping.
+- DTO field exposure.
+- Endpoint behavior using Postman.
+
+### Manual Verification
+- Executed `./mvnw clean test`
+- Started application locally.
+- Tested:
+    - POST /audit
+    - GET /audit
+    - Filtering by actorId
+    - Filtering by eventType
+    - Pagination

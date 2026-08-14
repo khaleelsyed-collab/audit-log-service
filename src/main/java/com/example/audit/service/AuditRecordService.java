@@ -86,4 +86,29 @@ public class AuditRecordService {
 
         return repository.save(record);
     }
+
+    /**
+     * Search audit records with optional filters. Uses Specifications to build predicates
+     * only for provided filter values.
+     *
+     * @param actorId      optional actor id filter
+     * @param resourceType optional resource type filter
+     * @param resourceId   optional resource id filter
+     * @param eventType    optional event type filter
+     * @param from         optional from timestamp (inclusive)
+     * @param to           optional to timestamp (inclusive)
+     * @param pageable     paging information
+     * @return page of AuditRecord matching filters
+     */
+    public org.springframework.data.domain.Page<AuditRecord> search(
+            String actorId,
+            String resourceType,
+            String resourceId,
+            String eventType,
+            java.time.Instant from,
+            java.time.Instant to,
+            org.springframework.data.domain.Pageable pageable) {
+        org.springframework.data.jpa.domain.Specification<AuditRecord> spec = com.example.audit.specification.AuditRecordSpecification.byFilters(actorId, resourceType, resourceId, eventType, from, to);
+        return repository.findAll(spec, pageable);
+    }
 }
