@@ -142,3 +142,33 @@ Generated a repository interface extending `JpaRepository` with multiple derived
 ### Validation
 - Repository compiled successfully.
 - Confirmed compatibility with the existing entity.
+
+## Commit 6 – SHA-256 Hash Utility
+
+### Intent
+Implement a reusable utility for deterministic SHA-256 hash generation.
+
+### Constraints
+- Use Java standard library only.
+- Ensure thread safety.
+- Produce deterministic lowercase hexadecimal hashes.
+- Avoid business logic.
+
+### Acceptance Criteria
+- Utility compiles successfully.
+- Uses SHA-256.
+- Returns deterministic results.
+- Suitable for reuse by future services.
+
+### AI Prompt
+Requested implementation of a reusable SHA-256 hashing utility using Java's built-in `MessageDigest`.
+
+### AI Response Summary
+Generated a thread-safe utility class with a reusable hashing method and manual hexadecimal conversion.
+
+### Human Review
+Reviewed the generated implementation, verified deterministic hashing behavior, confirmed UTF-8 encoding and thread safety, and ensured the utility aligns with the project architecture.
+
+### Validation
+- Project compiled successfully.
+- Utility reviewed for correctness and future reuse.

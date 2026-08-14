@@ -147,3 +147,9 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 - I reviewed the implementation, removed repository methods not required at this stage, and retained only the methods supporting append operations and chain verification.
 - I verified the repository aligns with the current implementation plan and follows incremental development.
 - I reviewed the generated repository, corrected the entity import to match the project's package structure, removed repository methods not required at this stage, and retained only the methods supporting append operations and chain verification.
+
+## Commit 6 – SHA-256 Hash Utility
+
+- Added a reusable SHA-256 hashing utility for deterministic hash generation.
+- AI generated the initial utility implementation using Java's `MessageDigest`.
+- I reviewed the implementation, verified thread safety and deterministic behavior, confirmed UTF-8 encoding and lowercase hexadecimal output, and adjusted the exception handling to better reflect application state.
