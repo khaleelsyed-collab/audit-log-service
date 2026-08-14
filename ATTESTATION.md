@@ -309,3 +309,34 @@ Returns the redacted payload when available.
 
 - Confirmed original payload remains unchanged.
 - Confirmed audit verification continues to succeed.
+
+
+## Commit 13 – Merkle Tree Verification
+
+### Engineer Changes
+
+Implemented Merkle Tree root generation to provide efficient integrity verification for the audit log.
+
+Changes include:
+
+- Added `MerkleTreeService`.
+- Added `AuditMerkleController`.
+- Added `MerkleRootResponse`.
+- Added `GET /audit/merkle/root` endpoint.
+- Built a Merkle Tree using stored audit record hashes.
+- Used SHA-256 to compute parent nodes.
+- Duplicated the last node when a layer contains an odd number of hashes.
+- Returned the Merkle Root, total record count, and generation timestamp.
+- Existing audit records and verification logic remain unchanged.
+
+### Testing Performed
+
+Successfully verified:
+
+- `GET /audit/verify`
+- `GET /audit/{id}/payload`
+- `GET /audit/{id}/payload?redacted=true`
+- `POST /audit/archive`
+- `GET /audit/merkle/root`
+
+Confirmed that the Merkle Root is generated successfully without modifying existing audit records.

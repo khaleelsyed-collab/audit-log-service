@@ -380,3 +380,51 @@ GitHub Copilot
 - Modifying the original payload.
 - Recomputing hashes after redaction.
 - Changing existing verification logic.
+
+
+## AI Prompt Used
+
+```
+Implement Merkle Tree verification for the audit log system.
+
+Requirements:
+- Build a Merkle Tree using stored audit record hashes.
+- Use SHA-256 for node hashing.
+- Duplicate the last node when the number of hashes is odd.
+- Add GET /audit/merkle/root endpoint.
+- Return totalRecords, merkleRoot and generatedAt.
+- Do not modify existing audit records.
+- Keep verification logic unchanged.
+```
+
+---
+
+## AI Tool Used
+
+GitHub Copilot
+
+---
+
+## AI Suggestions
+
+### Considered
+
+- Created a dedicated MerkleTreeService.
+- Added a response DTO.
+- Added a REST controller.
+- Ordered records by sequence number.
+- Used SHA-256 for node hashing.
+
+### Modified
+
+- Simplified implementation for readability.
+- Verified all endpoints manually.
+- Added project documentation.
+- Maintained existing coding conventions.
+
+### Rejected
+
+- Modifying stored hashes.
+- Updating audit records during Merkle generation.
+- Recomputing existing record hashes.
+- Changing audit verification logic.
