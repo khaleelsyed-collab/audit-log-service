@@ -47,6 +47,12 @@ public class AuditRecord {
     @Column(nullable = false, length = 64)
     private String hash;
 
+    @Column(nullable = false)
+    private boolean archived = false;
+
+    @Column
+    private Instant archivedAt;
+
     // Protected no-arg constructor required by JPA; visibility keeps entity effectively immutable for callers
     protected AuditRecord() {
     }
@@ -70,9 +76,11 @@ public class AuditRecord {
         this.sequenceNumber = sequenceNumber;
         this.previousHash = previousHash;
         this.hash = hash;
+        this.archived = false;
+        this.archivedAt = null;
     }
 
-    // Getters only to maintain immutability from API/service callers
+    // Getters and limited setters for archival behavior
     public Long getId() {
         return id;
     }
@@ -111,5 +119,21 @@ public class AuditRecord {
 
     public String getHash() {
         return hash;
+    }
+
+    public boolean isArchived() {
+        return archived;
+    }
+
+    public void setArchived(boolean archived) {
+        this.archived = archived;
+    }
+
+    public Instant getArchivedAt() {
+        return archivedAt;
+    }
+
+    public void setArchivedAt(Instant archivedAt) {
+        this.archivedAt = archivedAt;
     }
 }

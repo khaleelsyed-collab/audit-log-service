@@ -30,6 +30,11 @@ public interface AuditRecordRepository
     List<AuditRecord> findAllByOrderBySequenceNumberAsc();
 
     /**
+     * Find records with timestamp <= cutoff and not yet archived.
+     */
+    List<AuditRecord> findByTimestampLessThanEqualAndArchivedFalse(java.time.Instant cutoff);
+
+    /**
      * Retrieve all records for a given actor ordered by sequenceNumber ascending.
      * Useful for actor-scoped exports or verification across a single actor's events.
      */

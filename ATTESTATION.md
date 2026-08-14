@@ -163,6 +163,7 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 
 ## Commit 8 - Audit Search API
 
+
 Implemented a search API for audit records with optional filtering and pagination.
 
 Changes:
@@ -198,4 +199,38 @@ Changes:
   "firstBrokenSequence": null,
   "violation": null,
   "message": "Chain intact"
+}
+
+```
+
+## Commit 10 – Retention Policy (Soft Archival)
+
+### AI Tools
+- GitHub Copilot
+
+### Engineer Changes
+Implemented the first phase of retention management by introducing soft archival for audit records.
+
+Changes include:
+- Added `archived` and `archivedAt` fields to `AuditRecord`.
+- Added configurable retention period using `audit.retention.days`.
+- Implemented repository query to retrieve expired, non-archived records.
+- Created `AuditArchiveService` to archive expired records.
+- Added `/audit/archive` endpoint for manual archive execution.
+- Records are marked archived instead of being deleted.
+- Existing verification logic remains unchanged.
+
+### Testing Performed
+- Started application successfully.
+- Verified new database columns were created.
+- Executed:
+
+POST /audit/archive
+
+- Verified successful response:
+
+```json
+{
+  "archivedRecords": 0,
+  "message": "Retention policy executed successfully"
 }

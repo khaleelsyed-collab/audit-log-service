@@ -246,3 +246,64 @@ The implementation was corrected by truncating timestamps before hashing:
 Instant effectiveTimestamp =
         (timestamp == null ? Instant.now() : timestamp)
                 .truncatedTo(ChronoUnit.MICROS);
+```
+
+## Commit 10
+
+### Prompt Summary
+
+Requested implementation of the first phase of Scenario B:
+
+- retention policy
+- soft archival
+- configurable retention days
+- archive endpoint
+- preserve verification logic
+
+### AI Suggestions Used
+
+Generated:
+
+- AuditArchiveService
+- AuditArchiveController
+- ArchiveResponse DTO
+- Repository query
+- AuditRecord entity updates
+- application.properties configuration
+
+### Engineer Modifications
+
+Reviewed all generated code.
+
+Corrected entity annotations.
+
+Verified repository query.
+
+Resolved database schema issues.
+
+Restarted application after schema update.
+
+Verified archive endpoint.
+
+Verified hash chain integrity remained unchanged.
+
+### Verification
+
+POST /audit/archive
+
+Result:
+
+200 OK
+
+POST /audit/verify
+
+Result:
+
+{
+"chainIntact": true
+}
+
+### Final Decision
+
+Accepted with manual review and testing.
+
