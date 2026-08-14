@@ -153,3 +153,10 @@ I, Khaleel Syed, attest that this submission is my own individual work, complete
 - Added a reusable SHA-256 hashing utility for deterministic hash generation.
 - AI generated the initial utility implementation using Java's `MessageDigest`.
 - I reviewed the implementation, verified thread safety and deterministic behavior, confirmed UTF-8 encoding and lowercase hexadecimal output, and adjusted the exception handling to better reflect application state.
+
+### Commit 7 – Audit service implementation
+
+- Implemented AuditRecordService for immutable audit record creation.
+- Added CanonicalRecordUtil to build deterministic canonical strings for hashing.
+- Configured a genesis hash value for the first record in the chain.
+- Reviewed and refined the AI-generated implementation before committing.

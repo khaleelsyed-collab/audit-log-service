@@ -1,6 +1,6 @@
 package com.example.audit.repository;
 
-import com.example.audit.AuditRecord;
+import com.example.audit.entity.AuditRecord;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 

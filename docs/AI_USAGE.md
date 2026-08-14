@@ -172,3 +172,20 @@ Reviewed the generated implementation, verified deterministic hashing behavior, 
 ### Validation
 - Project compiled successfully.
 - Utility reviewed for correctness and future reuse.
+
+## Commit 7 – AuditRecordService
+
+**Intent**
+Implement the service responsible for appending immutable audit records.
+
+**AI Prompt**
+Generate a Spring service that computes sequence numbers, previous hashes, canonical record content, SHA-256 hashes, and persists immutable audit records.
+
+**AI Response Summary**
+Generated AuditRecordService and later refactored canonical string generation into CanonicalRecordUtil.
+
+**My Review / Modifications**
+- Reviewed the generated implementation.
+- Extracted canonical string generation into a reusable utility.
+- Verified package structure and imports.
+- Confirmed transactional behavior and hash-chain logic.
