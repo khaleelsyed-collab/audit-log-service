@@ -764,3 +764,23 @@ AI assistance was used only as a productivity aid. Final implementation decision
 | AI Response | Generated 401/403 authorization tests for controller endpoints. |
 | Engineer Decision | Reviewed, corrected failing integration tests, and verified the complete test suite before accepting changes. |
 | Trade-off | Existing application behavior was preserved; tests were aligned with implementation instead of modifying production code. |
+
+## Security Hardening
+
+### AI Tool
+Cursor AI
+
+### Prompt Summary
+Review the Spring Security configuration and suggest production-oriented improvements for HTTP security headers and CORS without changing the application's functional behavior.
+
+### AI Response
+Suggested adding explicit security headers (X-Frame-Options, X-Content-Type-Options, Referrer-Policy, HSTS) and tightening CORS configuration for production.
+
+### Engineer Review
+Reviewed every recommendation manually.
+Accepted security headers.
+Modified the CORS recommendation to remain compatible with assessment requirements and local testing.
+Removed unsupported API (`permissionsPolicy`) because it was not available in the project's Spring Security version.
+
+### Trade-offs
+Kept permissive origins for local assessment while documenting that production deployments should restrict trusted origins.

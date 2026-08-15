@@ -631,6 +631,13 @@ Every AI-generated change was manually reviewed, understood, modified where nece
 - Failing AI-generated tests were adjusted to match the implemented application behavior.
 - Final validation was performed by executing the complete Maven test suite successfully.
 
+### Additional AI Assistance
+
+- Reviewed Spring Security configuration.
+- Suggested explicit HTTP security headers.
+- Reviewed CORS configuration and documented production trade-offs.
+- All recommendations were manually reviewed, tested (`mvn clean test`), and adjusted where necessary before acceptance.
+
 ## Final Implementation Summary (Documentation & Tests)
 
 - Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).
