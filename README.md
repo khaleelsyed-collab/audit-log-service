@@ -94,6 +94,9 @@ src
 docs
 ├── API.md
 ├── REQUIREMENTS.md
+├── ARCHITECTURE.md
+├── MERKLE_TREE.md
+├── TRACEABILITY_MATRIX.md
 ├── AI_USAGE.md
 └── SCENARIO_C.md
 ```
@@ -183,9 +186,8 @@ target/site/jacoco/index.html
 
 Current Project Coverage
 
-- 58 Automated Tests
-- Instruction Coverage: **82%**
-- Branch Coverage: **64%**
+- 78 Automated Tests
+- JaCoCo coverage report generated during `mvn verify`
 
 Coverage reports are generated automatically using JaCoCo.
 
@@ -195,11 +197,11 @@ Coverage reports are generated automatically using JaCoCo.
 
 The application uses HTTP Basic Authentication.
 
-| Username | Password | Role |
-|----------|----------|------|
-| admin | adminpass | ROLE_ADMIN |
-| auditor | auditorpass | ROLE_AUDITOR |
-| system | systempass | ROLE_SYSTEM |
+| Username | Password   | Role |
+|----------|------------|------|
+| admin | admin123   | ROLE_ADMIN |
+| auditor | auditor123 | ROLE_AUDITOR |
+| system | system123  | ROLE_SYSTEM |
 
 ---
 
@@ -307,8 +309,12 @@ Additional documentation is available under the **docs/** directory.
 
 - API.md
 - REQUIREMENTS.md
+- ARCHITECTURE.md
+- MERKLE_TREE.md
+- TRACEABILITY_MATRIX.md
 - AI_USAGE.md
 - SCENARIO_C.md
+- ATTESTATION.md
 
 Additional project documentation:
 
@@ -332,8 +338,6 @@ Additional project documentation:
 - Docker Support
 - Kubernetes Deployment
 - Metrics Dashboard
-- Distributed Tracing
-- Database Partitioning
 
 ---
 

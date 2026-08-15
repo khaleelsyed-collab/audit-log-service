@@ -1,5 +1,9 @@
 # Requirement Analysis
 
+## Objective
+
+Design and implement a secure, tamper-evident audit logging service capable of recording immutable audit events, verifying integrity through SHA-256 hash chaining and Merkle Tree generation, and exposing REST APIs for search, verification, archival, export, and administration.
+
 ## Functional Requirements
 
 The application implements the following functional requirements:
