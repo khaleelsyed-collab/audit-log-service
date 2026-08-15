@@ -1,11 +1,11 @@
 # Audit Log Service
 
-A Spring Boot 4.x application built with Java 17 and Maven. This repository is an assessment prototype for a tamper-evident audit log service. It implements append-only audit recording, chain verification, search, retention (soft-archive), structured redaction, export bundles (verifiable via Merkle root), and supporting tooling.
+A Spring Boot 3.5.6 application built with Java 17 and Maven. This repository is an assessment prototype for a tamper-evident audit log service. It implements append-only audit recording, chain verification, search, retention (soft-archive), structured redaction, export bundles (verifiable via Merkle root), and supporting tooling.
 
 ## Stack
 
 - Java 17
-- Spring Boot 4.x
+- Spring Boot 3.5.6
 - Maven
 - Spring Web MVC
 - Spring Data JPA

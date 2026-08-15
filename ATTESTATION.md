@@ -8,9 +8,9 @@
 
 **Assignment Title:** AI-Assisted Software Engineering Assessment – Audit Log Service
 
-**Started On:** 13-Aug-2026
+**Started On:** 14-Aug-2026
 
-**Submitted On:** 14-Aug-2026
+**Submitted On:** 15-Aug-2026
 
 ## Attestation
 
