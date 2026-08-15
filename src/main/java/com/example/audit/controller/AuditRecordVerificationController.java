@@ -2,8 +2,10 @@ package com.example.audit.controller;
 
 import com.example.audit.dto.RecordVerificationResponse;
 import com.example.audit.service.AuditRecordVerificationService;
+import jakarta.validation.constraints.Positive;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/audit/verify")
+@Validated
 public class AuditRecordVerificationController {
 
     private final AuditRecordVerificationService verificationService;
@@ -29,7 +32,7 @@ public class AuditRecordVerificationController {
      */
     @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/{id}")
-    public ResponseEntity<RecordVerificationResponse> verify(@PathVariable("id") Long id) {
+    public ResponseEntity<RecordVerificationResponse> verify(@Positive(message = "id must be a positive number") @PathVariable("id") Long id) {
         RecordVerificationResponse resp = verificationService.verifyRecord(id);
         return ResponseEntity.ok(resp);
     }

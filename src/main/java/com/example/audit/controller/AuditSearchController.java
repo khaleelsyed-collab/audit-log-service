@@ -2,12 +2,16 @@ package com.example.audit.controller;
 
 import com.example.audit.dto.AuditSearchResponse;
 import com.example.audit.service.AuditSearchService;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.Size;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -18,6 +22,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/audit")
+@Validated
 public class AuditSearchController {
 
     private final AuditSearchService searchService;
@@ -36,12 +41,12 @@ public class AuditSearchController {
     @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR', 'SYSTEM')")
     @GetMapping("/search")
     public ResponseEntity<Page<AuditSearchResponse>> search(
-            @RequestParam(value = "actorId", required = false) String actorId,
-            @RequestParam(value = "eventType", required = false) String eventType,
-            @RequestParam(value = "resourceType", required = false) String resourceType,
-            @RequestParam(value = "resourceId", required = false) String resourceId,
-            @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size
+            @RequestParam(value = "actorId", required = false) @Size(max = 128, message = "actorId must be at most 128 characters") String actorId,
+            @RequestParam(value = "eventType", required = false) @Size(max = 128, message = "eventType must be at most 128 characters") String eventType,
+            @RequestParam(value = "resourceType", required = false) @Size(max = 128, message = "resourceType must be at most 128 characters") String resourceType,
+            @RequestParam(value = "resourceId", required = false) @Size(max = 128, message = "resourceId must be at most 128 characters") String resourceId,
+            @RequestParam(value = "page", required = false, defaultValue = "0") @Min(value = 0, message = "page must be greater than or equal to 0") int page,
+            @RequestParam(value = "size", required = false, defaultValue = "10") @Min(value = 1, message = "size must be at least 1") @Max(value = 200, message = "size must be at most 200") int size
     ) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "sequenceNumber"));
         Page<AuditSearchResponse> results = searchService.search(actorId, eventType, resourceType, resourceId, pageable);

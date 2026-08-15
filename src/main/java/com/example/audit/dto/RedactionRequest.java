@@ -1,7 +1,9 @@
 package com.example.audit.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
@@ -10,9 +12,10 @@ import java.util.List;
  */
 public class RedactionRequest {
 
-    @NotNull
-    @NotEmpty
-    private List<String> fields;
+    @NotNull(message = "fields is required")
+    @NotEmpty(message = "fields must not be empty")
+    @Size(min = 1, max = 20, message = "fields must contain between 1 and 20 entries")
+    private List<@NotBlank(message = "field names must not be blank") @Size(max = 64, message = "field names must be at most 64 characters") String> fields;
 
     public RedactionRequest() {
     }

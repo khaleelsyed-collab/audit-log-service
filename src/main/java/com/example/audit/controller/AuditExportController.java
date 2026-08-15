@@ -2,9 +2,10 @@ package com.example.audit.controller;
 
 import com.example.audit.dto.ExportBundleResponse;
 import com.example.audit.service.AuditExportService;
-
+import jakarta.validation.constraints.Size;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("/audit")
+@Validated
 public class AuditExportController {
 
     private final AuditExportService exportService;
@@ -33,9 +35,9 @@ public class AuditExportController {
     @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/export")
     public ResponseEntity<ExportBundleResponse> exportAll(
-            @RequestParam(required = false) String actorId,
-            @RequestParam(required = false) String resourceType,
-            @RequestParam(required = false) String resourceId
+            @RequestParam(required = false) @Size(max = 128, message = "actorId must be at most 128 characters") String actorId,
+            @RequestParam(required = false) @Size(max = 128, message = "resourceType must be at most 128 characters") String resourceType,
+            @RequestParam(required = false) @Size(max = 128, message = "resourceId must be at most 128 characters") String resourceId
     ) {
 
         ExportBundleResponse bundle =

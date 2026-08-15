@@ -2,6 +2,7 @@ package com.example.audit.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 
 import java.time.Instant;
 
@@ -11,19 +12,24 @@ import java.time.Instant;
  */
 public class AuditRecordRequest {
 
-    @NotBlank
+    @NotBlank(message = "eventType is required")
+    @Size(max = 128, message = "eventType must be at most 128 characters")
     private String eventType;
 
-    @NotBlank
+    @NotBlank(message = "actorId is required")
+    @Size(max = 128, message = "actorId must be at most 128 characters")
     private String actorId;
 
-    @NotBlank
+    @NotBlank(message = "resourceType is required")
+    @Size(max = 128, message = "resourceType must be at most 128 characters")
     private String resourceType;
 
-    @NotBlank
+    @NotBlank(message = "resourceId is required")
+    @Size(max = 128, message = "resourceId must be at most 128 characters")
     private String resourceId;
 
-    @NotBlank
+    @NotBlank(message = "payload is required")
+    @Size(max = 5000, message = "payload must be at most 5000 characters")
     private String payload;
 
     // Optional: caller-supplied timestamp. If null, server will assign receive-time.
