@@ -1,30 +1,115 @@
 # Audit Log Service
 
-Swagger UI: http://localhost:8080/swagger-ui.html
+A Spring Boot 3.5.6 application built with Java 17 and Maven that implements a **tamper-evident Audit Log Service**. The system provides immutable audit logging using SHA-256 hash chaining and Merkle Tree verification, along with search, archival, redaction, export, and verification capabilities.
 
+---
 
-A Spring Boot 3.5.6 application built with Java 17 and Maven. This repository is an assessment prototype for a tamper-evident audit log service. It implements append-only audit recording, chain verification, search, retention (soft-archive), structured redaction, export bundles (verifiable via Merkle root), and supporting tooling.
+## Features
 
-## Stack
+- Append-only immutable audit log storage
+- SHA-256 hash chain for tamper detection
+- Merkle Tree generation and verification
+- Audit record verification
+- Search with filtering and pagination
+- Soft archival of audit records
+- Payload redaction
+- Export verifiable audit bundles
+- HTTP Basic Authentication
+- REST APIs documented using Swagger / OpenAPI
+- Comprehensive Unit and Integration Tests
+- JaCoCo Code Coverage Reports
+
+---
+
+## Technology Stack
 
 - Java 17
 - Spring Boot 3.5.6
-- Maven
-- Spring Web MVC
+- Spring MVC
 - Spring Data JPA
-- Validation
-- Actuator
-- PostgreSQL (production target)
-- H2 database (development / in-memory for tests)
+- Spring Validation
+- Spring Security
+- Spring Boot Actuator
+- PostgreSQL
+- H2 Database (Testing)
+- Maven
+- Swagger / OpenAPI
+- JaCoCo
+
+---
+
+## Architecture
+
+The application follows a layered architecture:
+
+```
+Client
+   │
+   ▼
+Controllers
+   │
+   ▼
+Services
+   │
+   ▼
+Repositories
+   │
+   ▼
+PostgreSQL / H2
+```
+
+Security is implemented using Spring Security with HTTP Basic Authentication.
+
+Data integrity is maintained using:
+
+- SHA-256 Hash Chaining
+- Merkle Tree Verification
+- Immutable Audit Records
+
+---
+
+## Project Structure
+
+```
+src
+├── main
+│   ├── java
+│   │   └── com.example.audit
+│   │       ├── config
+│   │       ├── controller
+│   │       ├── dto
+│   │       ├── entity
+│   │       ├── exception
+│   │       ├── repository
+│   │       ├── service
+│   │       ├── specification
+│   │       └── util
+│   └── resources
+│
+└── test
+    ├── controller
+    ├── service
+    └── exception
+
+docs
+├── API.md
+├── REQUIREMENTS.md
+├── AI_USAGE.md
+└── SCENARIO_C.md
+```
+
+---
 
 ## Prerequisites
 
-- Java 17 SDK
-- Maven 3.8+ (or use the included Maven wrapper)
+- Java 17
+- Maven 3.8+
+- PostgreSQL (for production)
+- H2 Database (for testing)
 
-## Run locally
+---
 
-The application can be run with the bundled Maven wrapper. By default the project is configured to use PostgreSQL in `src/main/resources/application.properties`. For local development and tests the embedded H2 database is supported and tests will use an in-memory database.
+## Running the Application
 
 Start the application:
 
@@ -32,115 +117,240 @@ Start the application:
 ./mvnw spring-boot:run
 ```
 
-Run tests:
+Application URL
 
-```bash
-./mvnw test
+```
+http://localhost:8081
 ```
 
-If you want to run the application against H2 locally, set the following environment property or create `src/main/resources/application-local.properties` and enable the `local` profile (example not included):
+---
 
-```properties
-spring.datasource.url=jdbc:h2:mem:auditlog;DB_CLOSE_DELAY=-1
-spring.datasource.driver-class-name=org.h2.Driver
-spring.datasource.username=sa
-spring.datasource.password=
-spring.jpa.hibernate.ddl-auto=create-drop
+## Swagger / OpenAPI
+
+Swagger UI
+
 ```
+http://localhost:8081/swagger-ui.html
+```
+
+OpenAPI Specification
+
+```
+http://localhost:8081/v3/api-docs
+```
+
+---
 
 ## Build
 
-Create a production jar:
+Build the application
+
+```bash
+./mvnw clean package
+```
+
+Build without tests
 
 ```bash
 ./mvnw -DskipTests package
 ```
 
+---
+
+## Running Tests
+
+Execute all tests
+
+```bash
+./mvnw test
+```
+
+Generate JaCoCo coverage report
+
+```bash
+./mvnw clean verify
+```
+
+Coverage report
+
+```
+target/site/jacoco/index.html
+```
+
+---
+
+## Test Coverage
+
+Current Project Coverage
+
+- 58 Automated Tests
+- Instruction Coverage: **82%**
+- Branch Coverage: **64%**
+
+Coverage reports are generated automatically using JaCoCo.
+
+---
+
 ## Authentication
 
-This service is protected with HTTP Basic authentication. Three in-memory users are provided for the assessment:
+The application uses HTTP Basic Authentication.
 
-- admin / adminpass (ROLE_ADMIN)
-- auditor / auditorpass (ROLE_AUDITOR)
-- system / systempass (ROLE_SYSTEM)
+| Username | Password | Role |
+|----------|----------|------|
+| admin | adminpass | ROLE_ADMIN |
+| auditor | auditorpass | ROLE_AUDITOR |
+| system | systempass | ROLE_SYSTEM |
 
-Use credentials with curl examples below: e.g. `curl -u auditor:auditorpass ...`
+---
 
-## Sample HTTP examples
+## Sample APIs
 
-Replace `localhost:8080` with your configured server/port.
-
-- Create (append) an audit record
-
-```bash
-curl -X POST http://localhost:8080/audit \
-  -H "Content-Type: application/json" \
-  -d '{"eventType":"USER_LOGIN","actorId":"alice","resourceType":"ACCOUNT","resourceId":"1001","payload":"{\"ip\":\"1.2.3.4\"}","timestamp":null}'
-```
-
-- Search (paged) with filters
+### Create Audit Record
 
 ```bash
-curl "http://localhost:8080/audit/search?actorId=alice&page=0&size=10"
+curl -u admin:adminpass \
+-X POST http://localhost:8081/audit \
+-H "Content-Type: application/json" \
+-d '{
+  "eventType":"USER_LOGIN",
+  "actorId":"alice",
+  "resourceType":"ACCOUNT",
+  "resourceId":"1001",
+  "payload":"{\"ip\":\"1.2.3.4\"}"
+}'
 ```
 
-- Full chain verification
+---
+
+### Search Records
 
 ```bash
-curl http://localhost:8080/audit/verify
+curl -u auditor:auditorpass \
+"http://localhost:8081/audit/search?actorId=alice&page=0&size=10"
 ```
 
-- Single record verification by id
+---
+
+### Verify Audit Chain
 
 ```bash
-curl http://localhost:8080/audit/verify/1
+curl -u auditor:auditorpass \
+http://localhost:8081/audit/verify
 ```
 
-- Run retention archival (soft-archive)
+---
+
+### Verify Single Record
 
 ```bash
-curl -X POST http://localhost:8080/audit/archive
+curl -u auditor:auditorpass \
+http://localhost:8081/audit/verify/1
 ```
 
-- Redact top-level fields from a record payload (replace {id})
+---
+
+### Archive Records
 
 ```bash
-curl -X POST http://localhost:8080/audit/redact/1 \
-  -H "Content-Type: application/json" \
-  -d '{"fields":["ssn","accountNumber"]}'
+curl -u admin:adminpass \
+-X POST http://localhost:8081/audit/archive
 ```
 
-- Export verifiable bundle
+---
+
+### Redact Payload
 
 ```bash
-curl "http://localhost:8080/audit/export"
-curl "http://localhost:8080/audit/export?actorId=alice"
-curl "http://localhost:8080/audit/export?resourceId=1001"
+curl -u admin:adminpass \
+-X POST http://localhost:8081/audit/redact/1 \
+-H "Content-Type: application/json" \
+-d '{
+  "fields":[
+      "ssn",
+      "accountNumber"
+  ]
+}'
 ```
 
-- Get Merkle root for all records
+---
+
+### Export Audit Bundle
 
 ```bash
-curl http://localhost:8080/audit/merkle/root
+curl -u auditor:auditorpass \
+http://localhost:8081/audit/export
 ```
 
-- Get statistics
+---
+
+### Generate Merkle Root
 
 ```bash
-curl http://localhost:8080/audit/stats
+curl -u auditor:auditorpass \
+http://localhost:8081/audit/merkle/root
 ```
+
+---
+
+### Statistics
+
+```bash
+curl -u auditor:auditorpass \
+http://localhost:8081/audit/stats
+```
+
+---
 
 ## Documentation
 
-Additional docs are available under `docs/`:
+Additional documentation is available under the **docs/** directory.
 
-- `docs/REQUIREMENTS.md` — requirement analysis and assumptions
-- `docs/AI_USAGE.md` — AI usage traceability log
-- `docs/SCENARIO_C.md` — Compliance reporting clarification and design
-- `docs/API.md` — API reference for implemented endpoints
+- API.md
+- REQUIREMENTS.md
+- AI_USAGE.md
+- SCENARIO_C.md
 
-## Notes
+Additional project documentation:
 
-- All APIs are read-only where required by the assessment (no update/delete endpoints are exposed).
-- The system stores an immutable audit record and maintains a hash-chain and Merkle root for tamper-evidence.
-- See `ATTESTATION.md` for the attestation and a summary of AI assistance used in the project.
+- ATTESTATION.md
+
+---
+
+## Assumptions
+
+- Audit records are immutable.
+- Only payload redaction is permitted.
+- Archive operations are soft deletes.
+- SHA-256 is used for hash generation.
+- Merkle Tree verifies exported bundles.
+
+---
+
+## Future Enhancements
+
+- JWT/OAuth2 Authentication
+- Docker Support
+- Kubernetes Deployment
+- Metrics Dashboard
+- Distributed Tracing
+- Database Partitioning
+
+---
+
+## AI Usage
+
+AI assistance (GitHub Copilot and ChatGPT) was used to assist with:
+
+- Documentation
+- Unit Tests
+- Integration Tests
+- Swagger/OpenAPI configuration
+- JaCoCo configuration
+
+All generated code was manually reviewed, validated, and tested before acceptance.
+
+---
+
+## License
+
+This project was developed for assessment purposes.

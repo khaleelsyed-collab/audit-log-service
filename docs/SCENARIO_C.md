@@ -1,46 +1,113 @@
 # Scenario C — Compliance Reporting
 
-Problem statement
+## Problem Statement
 
-Regulators require the ability to audit access to client account data. The requirement is intentionally ambiguous: it does not specify which events, what time range, what level of detail, or who may request the report. The goal is to define a clear, defensible scope for a compliance reporting feature and provide an implementation that satisfies the likely regulatory need while limiting scope to what can be implemented safely in the assessment.
+Regulators require the ability to audit access to client account data. The requirement is intentionally broad and does not define:
 
-Ambiguities identified
+- Which audit events must be included.
+- Who is authorized to request reports.
+- The reporting period.
+- Whether reports should contain full payloads or only metadata.
+- How exported reports should be verified for integrity.
 
-- Which events count as "access to client account data" (reads, writes, metadata-only)?
-- Who may request the report (internal auditors, external regulators)?
-- What retention, redaction, or anonymization policies apply to reports? 
-- Whether the regulator needs raw payloads or summarized metadata.
+This implementation defines a practical scope that satisfies the assessment requirements while remaining aligned with the implemented functionality.
 
-Assumptions made
+---
 
-- "Access" includes any event with resourceType set to `ACCOUNT` (reads/writes/permission changes).
-- Exported reports are requested by an authorized internal auditor; handling external regulator authentication/authorization is out of scope for this implementation.
-- Reports must preserve tamper evidence: exported bundles include chain metadata and Merkle root so recipients can verify integrity.
-- Sensitive values in payloads should be redacted before export if a redactedPayload is available; otherwise original payload is included (the system stores both to preserve chain integrity).
+## Identified Ambiguities
 
-Design decisions
+The following requirements are not explicitly defined:
 
-- Scope: implement a verifiable export bundle for a given resourceId (account) that includes ordered records, first/last sequence numbers and hashes, and a Merkle root computed over the exported record hashes.
-- Verification: the recipient can recompute the Merkle root from exported hashes to verify integrity. Full chain verification is available via the `/audit/verify` endpoint on the origin system.
-- Redaction: redactedPayload is used when available to avoid leaking sensitive fields; redaction does not alter stored hashes.
-- Access control: this assessment does not implement regulator authentication/authorization — in a production system this would be required (audit trail for report requests, secure transmission, and access control enforcement).
+- Which event types represent access to client account data.
+- Whether reports are intended for internal auditors or external regulators.
+- Applicable retention and redaction policies.
+- Whether exported reports require cryptographic verification.
+- Expected report size and delivery mechanism.
 
-Why this satisfies the scenario
+---
 
-- The export bundle supplies ordered events affecting an account (resourceId) and includes the cryptographic anchors (first/last hashes and Merkle root) required for recipients to verify integrity.
-- The approach balances regulator needs (verifiable records) and privacy (redaction support and avoidance of unauthorized raw payload distribution).
+## Assumptions
 
-Trade-offs and limitations
+The implementation makes the following assumptions:
 
-- The current export includes payload by default. For sensitive production use, exports should by default use redactedPayload and only include raw payloads under strict controls.
-- The system assumes authorized requesters; enforcement and audit logging of who requested a report are out of scope and should be added in production.
-- Large exports are returned in-memory; for production, streaming or chunked export formats are recommended.
+- Records with `resourceType = ACCOUNT` represent client account activity.
+- Reports are requested only by authenticated and authorized users.
+- Exported reports must preserve audit integrity.
+- If a `redactedPayload` exists, it is preferred over the original payload during export.
+- Existing audit records remain immutable after creation.
 
-Future improvements
+---
 
-- Implement RBAC for export requests and maintain an audit trail for report generation requests.
-- Support streaming exports and signed bundle artifacts.
-- Provide configurable redaction policies and explainability for what was redacted in each export.
-- Allow export of payloads encrypted for recipient with key management and access controls.
+## Design Decisions
 
+The compliance reporting feature is implemented using the existing audit export capability.
 
+The exported bundle contains:
+
+- Audit records in sequence order.
+- Record hashes.
+- First and last sequence information.
+- Merkle Root for integrity verification.
+- Export metadata.
+
+Integrity is preserved by:
+
+- SHA-256 hash chaining between audit records.
+- Merkle Root generation across exported record hashes.
+- Independent verification using the exported cryptographic data.
+- Full chain verification through the `/audit/verify` endpoint.
+
+Sensitive information is protected by exporting `redactedPayload` whenever available while preserving the original record hash.
+
+---
+
+## Why This Solution Meets the Requirement
+
+The implementation provides:
+
+- Ordered audit records for the requested account.
+- Tamper-evident verification using hash chaining.
+- Independent verification through the exported Merkle Root.
+- Support for payload redaction.
+- Immutable audit history.
+
+This provides regulators or auditors with verifiable evidence without modifying the original audit records.
+
+---
+
+## Limitations
+
+The current implementation intentionally limits scope.
+
+- Export requests assume authorized users.
+- Audit logging of report generation requests is not implemented.
+- Reports are generated in memory and are not streamed.
+- Raw payloads may be included when no redacted version exists.
+- Digital signatures for exported bundles are not implemented.
+
+These items would normally be required in a production environment.
+
+---
+
+## Future Enhancements
+
+Possible production improvements include:
+
+- Role-based access control for compliance report generation.
+- Audit logging of report requests.
+- Streaming support for large exports.
+- Digitally signed export bundles.
+- Configurable redaction policies.
+- Encrypted report delivery.
+- Scheduled compliance report generation.
+
+---
+
+## Implemented Endpoints
+
+| Endpoint | Purpose |
+|----------|---------|
+| `/audit/export` | Export verifiable audit records |
+| `/audit/verify` | Verify the complete audit chain |
+| `/audit/verify/{id}` | Verify an individual audit record |
+| `/audit/merkle/root` | Retrieve the current Merkle Root |

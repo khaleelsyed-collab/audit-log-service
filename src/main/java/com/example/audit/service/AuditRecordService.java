@@ -2,16 +2,16 @@ package com.example.audit.service;
 
 import com.example.audit.entity.AuditRecord;
 import com.example.audit.repository.AuditRecordRepository;
+import com.example.audit.util.CanonicalRecordUtil;
 import com.example.audit.util.HashUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.PlatformTransactionManager;
+import org.springframework.transaction.support.TransactionTemplate;
 
 import java.time.Instant;
-import java.util.Optional;
-
 import java.time.temporal.ChronoUnit;
-import com.example.audit.util.CanonicalRecordUtil;
+import java.util.Optional;
 
 /**
  * Service responsible for appending immutable audit records.
@@ -30,11 +30,15 @@ public class AuditRecordService {
 
     private final AuditRecordRepository repository;
     private final String genesisValue;
+    private final TransactionTemplate transactionTemplate;
+    private final Object appendLock = new Object();
 
     public AuditRecordService(AuditRecordRepository repository,
-                              @Value("${audit.log.genesis-value:audit-log-genesis-v1}") String genesisValue) {
+                              @Value("${audit.log.genesis-value:audit-log-genesis-v1}") String genesisValue,
+                              PlatformTransactionManager transactionManager) {
         this.repository = repository;
         this.genesisValue = genesisValue;
+        this.transactionTemplate = new TransactionTemplate(transactionManager);
     }
 
     /**
@@ -44,6 +48,10 @@ public class AuditRecordService {
      * The method determines the next sequence number and the previous hash
      * value, computes the current content hash, and persists the record.
      *
+     * Concurrent appends are serialized so sequence assignment and previousHash
+     * linkage remain consistent; the transaction commits while the append lock
+     * is still held to avoid lost updates under interleaving threads.
+     *
      * @param eventType   type of the event (required)
      * @param actorId     actor identifier (required)
      * @param resourceType resource type (required)
@@ -52,13 +60,24 @@ public class AuditRecordService {
      * @param timestamp   event timestamp; if null, server time is used
      * @return persisted AuditRecord with assigned id and sequence
      */
-    @Transactional
     public AuditRecord appendRecord(String eventType,
                                     String actorId,
                                     String resourceType,
                                     String resourceId,
                                     String payload,
                                     Instant timestamp) {
+        synchronized (appendLock) {
+            return transactionTemplate.execute(status ->
+                    doAppendRecord(eventType, actorId, resourceType, resourceId, payload, timestamp));
+        }
+    }
+
+    private AuditRecord doAppendRecord(String eventType,
+                                       String actorId,
+                                       String resourceType,
+                                       String resourceId,
+                                       String payload,
+                                       Instant timestamp) {
         Instant effectiveTimestamp =
                 (timestamp == null ? Instant.now() : timestamp)
                         .truncatedTo(ChronoUnit.MICROS);
@@ -74,7 +93,6 @@ public class AuditRecordService {
         String canonical = CanonicalRecordUtil.buildCanonicalString(eventType, actorId, resourceType, resourceId, payload, effectiveTimestamp, nextSequence, previousHash);
 
         String currentHash = HashUtil.sha256Hex(canonical);
-
 
         AuditRecord record = new AuditRecord(
                 eventType,

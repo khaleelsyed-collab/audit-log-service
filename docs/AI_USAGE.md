@@ -732,3 +732,25 @@ AI assistance was used only as a productivity aid. Final implementation decision
 - 58 tests passed
 - 82% instruction coverage
 - 64% branch coverage
+
+## Session: Replay & Concurrency Testing
+
+| Item | Details |
+|------|---------|
+| Feature | Replay and concurrency test coverage |
+| AI Tool Used | Cursor AI |
+| AI Response | Generated replay and concurrent append test scenarios and suggested concurrency handling. |
+| Engineer Decision | Reviewed, refined, and integrated the tests. Restored synchronized append implementation after validating concurrency behavior. |
+| Trade-off | Retained synchronized locking for single-instance consistency. Distributed locking or database-level coordination identified as a production enhancement. |
+
+---
+
+## Session: Documentation Improvements
+
+| Item | Details |
+|------|---------|
+| Feature | README, API, Requirements and Scenario C updates |
+| AI Tool Used | ChatGPT + Cursor AI |
+| AI Response | Suggested documentation improvements, endpoint descriptions and assessment clarifications. |
+| Engineer Decision | Reviewed and edited all documentation to match the implemented application before updating. |
+| Trade-off | Documentation reflects the current implementation only; future enhancements are documented separately. |

@@ -617,6 +617,13 @@ Every AI-generated change was manually reviewed, understood, modified where nece
 - `target/site/jacoco/jacoco.xml`
 - `target/surefire-reports/`
 
+### Commit - Replay & Concurrency Testing
+
+- Used AI to draft replay/concurrency test scenarios and documentation improvements.
+- All generated content was manually reviewed, validated and adjusted before inclusion.
+- Production code changes were verified by executing the complete test suite.
+- Final implementation decisions, concurrency approach and documentation accuracy were made by the engineer.
+
 ## Final Implementation Summary (Documentation & Tests)
 
 - Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).

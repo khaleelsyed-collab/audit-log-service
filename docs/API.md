@@ -1,258 +1,553 @@
 # Audit Log Service API
 
-Base URL: http://{host}:{port}
+Base URL: `http://<host>:<port>`
+
+## Authentication
+
+All endpoints use HTTP Basic authentication.
+
+The application configures three in-memory users:
+
+- `admin` / `admin123` with role `ROLE_ADMIN`
+- `auditor` / `auditor123` with role `ROLE_AUDITOR`
+- `system` / `system123` with role `ROLE_SYSTEM`
+
+Example:
+
+```bash
+curl -u admin:admin123 http://localhost:8080/audit
+```
+
+## Common status codes
+
+- `200 OK`
+- `201 Created`
+- `400 Bad Request`
+- `401 Unauthorized` (missing or invalid Basic credentials)
+- `403 Forbidden` (authenticated but insufficient role)
+- `404 Not Found` (resource not found in endpoints that accept IDs)
+- `500 Internal Server Error` (can occur when a missing record causes a runtime exception)
+
+## Common error response
+
+Validation and request parsing failures are returned as JSON in the following shape:
+
+```json
+{
+  "timestamp": "2026-08-15T12:00:00Z",
+  "status": 400,
+  "error": "Bad Request",
+  "message": "eventType is required",
+  "path": "/audit"
+}
+```
+
+This is produced by the global `GlobalExceptionHandler` for validation errors such as `MethodArgumentNotValidException`, `ConstraintViolationException`, `HttpMessageNotReadableException`, `MethodArgumentTypeMismatchException`, and `IllegalArgumentException`.
 
 ---
 
 ## POST /audit
 
-- Purpose: Append a new audit record (append-only).
-- Request body (JSON):
-  - eventType (string, required)
-  - actorId (string, required)
-  - resourceType (string, required)
-  - resourceId (string, required)
-  - payload (string or JSON, optional)
-  - timestamp (ISO-8601 string, optional — if omitted server assigns current time)
+Create a new audit record.
 
-- Sample request:
-```
+- Authentication: `ROLE_ADMIN`, `ROLE_SYSTEM`
+- Content-Type: `application/json`
+- Request body: `AuditRecordRequest`
+
+### Fields
+
+| Field | Type | Required | Description |
+| --- | --- | --- | --- |
+| `eventType` | string | yes | Event category such as `LOGIN` |
+| `actorId` | string | yes | User or service acting on the resource |
+| `resourceType` | string | yes | Resource category such as `ACCOUNT` |
+| `resourceId` | string | yes | Resource identifier |
+| `payload` | string | yes | Payload as a JSON string, max 5000 chars |
+| `timestamp` | ISO-8601 string | no | Optional caller-supplied timestamp |
+
+### Example request
+
+```http
 POST /audit
-{
-  "eventType":"USER_LOGIN",
-  "actorId":"alice",
-  "resourceType":"ACCOUNT",
-  "resourceId":"1001",
-  "payload":"{\"ip\":\"1.2.3.4\"}"
-}
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
 ```
-- Sample response: 201 Created
-```
+
+```json
 {
-  "sequenceNumber": 1,
-  "eventType": "USER_LOGIN",
-  "actorId": "alice",
+  "eventType": "LOGIN",
+  "actorId": "user-123",
   "resourceType": "ACCOUNT",
-  "resourceId": "1001",
-  "timestamp": "2026-08-10T12:00:00Z",
-  "hash": "..."
+  "resourceId": "account-100",
+  "payload": "{\"status\":\"ACTIVE\"}",
+  "timestamp": "2026-08-15T12:00:00Z"
 }
 ```
 
-- Status codes: 201 Created, 400 Bad Request
+### Example response
+
+```json
+{
+  "id": 100,
+  "sequenceNumber": 42,
+  "hash": "e3b0c44298fc1c149afbf4c8996fb924...",
+  "previousHash": "0000000000000000000000000000000000000000000000000000000000000000",
+  "timestamp": "2026-08-15T12:00:00Z"
+}
+```
+
+### Status codes
+
+- `201 Created`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
+
+---
+
+## GET /audit
+
+Retrieve audit records with optional filters and pagination.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`, `ROLE_SYSTEM`
+- Query parameters:
+  - `actorId` (optional, string)
+  - `resourceType` (optional, string)
+  - `resourceId` (optional, string)
+  - `eventType` (optional, string)
+  - `from` (optional, ISO-8601 instant)
+  - `to` (optional, ISO-8601 instant)
+  - `page` (optional, default `0`)
+  - `size` (optional, default `10`, min `1`, max `200`)
+
+### Example request
+
+```http
+GET /audit?actorId=user-123&resourceType=ACCOUNT&page=0&size=10
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+```
+
+### Example response
+
+```json
+{
+  "content": [
+    {
+      "id": 100,
+      "sequenceNumber": 42,
+      "eventType": "LOGIN",
+      "actorId": "user-123",
+      "resourceType": "ACCOUNT",
+      "resourceId": "account-100",
+      "timestamp": "2026-08-15T12:00:00Z",
+      "hash": "e3b0c44298fc1c149afbf4c8996fb924..."
+    }
+  ],
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "sort": {
+      "sorted": true,
+      "unsorted": false,
+      "empty": false
+    }
+  },
+  "totalElements": 1,
+  "totalPages": 1,
+  "last": true,
+  "first": true,
+  "numberOfElements": 1,
+  "size": 10,
+  "number": 0,
+  "empty": false
+}
+```
+
+### Status codes
+
+- `200 OK`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
 
 ---
 
 ## GET /audit/search
 
-- Purpose: Search audit records using optional filters and pagination.
+Search audit records with optional filters and pagination.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`, `ROLE_SYSTEM`
 - Query parameters:
-  - actorId (optional)
-  - eventType (optional)
-  - resourceType (optional)
-  - resourceId (optional)
-  - page (optional, default 0)
-  - size (optional, default 10)
+  - `actorId` (optional, max 128)
+  - `eventType` (optional, max 128)
+  - `resourceType` (optional, max 128)
+  - `resourceId` (optional, max 128)
+  - `page` (optional, default `0`, min `0`)
+  - `size` (optional, default `10`, min `1`, max `200`)
 
-- Returns: Page of AuditSearchResponse ordered by sequenceNumber ascending.
+### Example request
 
-- Sample request:
+```http
+GET /audit/search?eventType=LOGIN&page=0&size=10
+Authorization: Basic YW5hbHlzdDp0ZXN0
 ```
-GET /audit/search?actorId=alice&page=0&size=10
-```
-- Sample response: 200 OK (Page with content)
-```
+
+### Example response
+
+```json
 {
   "content": [
     {
-      "sequenceNumber": 1,
-      "eventType": "USER_LOGIN",
-      "actorId": "alice",
+      "sequenceNumber": 42,
+      "eventType": "LOGIN",
+      "actorId": "user-123",
       "resourceType": "ACCOUNT",
-      "resourceId": "1001",
-      "timestamp": "2026-08-10T12:00:00Z",
-      "hash": "..."
+      "resourceId": "account-100",
+      "timestamp": "2026-08-15T12:00:00Z",
+      "hash": "e3b0c44298fc1c149afbf4c8996fb924..."
     }
   ],
-  "pageable": { /* omitted */ },
+  "pageable": {
+    "pageNumber": 0,
+    "pageSize": 10,
+    "sort": {
+      "unsorted": false,
+      "sorted": true,
+      "empty": false
+    }
+  },
   "totalElements": 1,
   "totalPages": 1,
+  "last": true,
+  "first": true,
+  "numberOfElements": 1,
+  "size": 10,
   "number": 0,
-  "size": 10
+  "empty": false
 }
 ```
 
-- Status codes: 200 OK
+### Status codes
+
+- `200 OK`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
 
 ---
 
 ## GET /audit/verify
 
-- Purpose: Verify the full hash chain across all stored records and report whether it is intact.
-- Sample request:
-```
+Verify the hash chain across all stored audit records.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
+- No request body.
+
+### Example request
+
+```http
 GET /audit/verify
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
-- Sample response: 200 OK
-```
+
+### Example response
+
+```json
 {
   "chainIntact": true,
-  "brokenAtSequence": null,
-  "message": "Chain intact"
+  "firstBrokenSequence": null,
+  "violation": null,
+  "message": "Audit chain is intact"
 }
 ```
 
-- Status codes: 200 OK
+### Status codes
+
+- `200 OK`
+- `401 Unauthorized`
+- `403 Forbidden`
 
 ---
 
 ## GET /audit/verify/{id}
 
-- Purpose: Verify a single audit record by its database id.
-- Path parameter: id (long)
-- Sample request:
+Verify a single audit record by database ID.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
+- Path parameter:
+  - `id` (required, positive long)
+
+### Example request
+
+```http
+GET /audit/verify/100
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
-GET /audit/verify/1
-```
-- Sample response: 200 OK
-```
+
+### Example response
+
+```json
 {
-  "id": 1,
+  "id": 100,
   "valid": true,
-  "storedHash": "...",
-  "computedHash": "...",
-  "message": "Record hash matches"
+  "storedHash": "e3b0c44298fc1c149afbf4c8996fb924...",
+  "computedHash": "e3b0c44298fc1c149afbf4c8996fb924...",
+  "message": "Record hash matches stored value"
 }
 ```
 
-- Status codes: 200 OK, 500 RuntimeException if record not found
+### Status codes
 
----
-
-## POST /audit/archive
-
-- Purpose: Run retention policy and mark expired records as archived (soft-delete).
-- Sample request:
-```
-POST /audit/archive
-```
-- Sample response: 200 OK
-```
-{
-  "archivedCount": 5
-}
-```
-
-- Status codes: 200 OK
-
----
-
-## POST /audit/redact/{sequenceNumber}
-
-- Purpose: Redact specified top-level fields in a record payload. Stores redactedPayload but does not change hashes.
-- Path parameter: sequenceNumber (long)
-- Request body (JSON): { "fields": ["ssn","accountNumber"] }
-
-- Sample request:
-```
-POST /audit/redact/1
-{
-  "fields":["ssn","accountNumber"]
-}
-```
-- Sample response: 200 OK
-```
-{
-  "sequenceNumber": 1,
-  "redactedPayload": "{\"ssn\":\"********\",\"accountNumber\":\"********\"}"
-}
-```
-
-- Status codes: 200 OK, 400 Bad Request
+- `200 OK`
+- `400 Bad Request` (invalid ID)
+- `401 Unauthorized`
+- `403 Forbidden`
+- `404 Not Found` (if the service returns not found)
+- `500 Internal Server Error` (missing record can trigger an exception in current implementation)
 
 ---
 
 ## GET /audit/export
 
-- Purpose: Export a self-contained, verifiable bundle of audit records. Supports optional filters.
+Export audit records as a bundle with verification metadata.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
 - Query parameters:
-  - actorId (optional)
-  - resourceId (optional)
+  - `actorId` (optional, max 128)
+  - `resourceType` (optional, max 128)
+  - `resourceId` (optional, max 128)
 
-- Behavior: If no filters provided, exports all records. If actorId provided, exports records for that actor. If resourceId provided, exports records for that resource. Results ordered by sequenceNumber ascending.
+### Example request
 
-- Sample requests:
+```http
+GET /audit/export?actorId=user-123&resourceType=ACCOUNT
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
-GET /audit/export
-GET /audit/export?actorId=alice
-GET /audit/export?resourceId=1001
-```
-- Sample response: 200 OK
-```
+
+### Example response
+
+```json
 {
-  "actorId": null,
-  "resourceId": "1001",
-  "totalRecords": 10,
-  "firstSequence": 1,
-  "lastSequence": 10,
-  "firstHash": "...",
-  "lastHash": "...",
-  "merkleRoot": "...",
-  "generatedAt": "2026-08-10T12:00:00Z",
-  "records": [ /* ExportRecordResponse[] */ ]
+  "actorId": "user-123",
+  "resourceType": "ACCOUNT",
+  "resourceId": null,
+  "totalRecords": 2,
+  "firstSequence": 40,
+  "lastSequence": 41,
+  "firstHash": "000abc...",
+  "lastHash": "def456...",
+  "merkleRoot": "a1b2c3...",
+  "generatedAt": "2026-08-15T12:00:00Z",
+  "records": [
+    {
+      "sequenceNumber": 40,
+      "eventType": "LOGIN",
+      "actorId": "user-123",
+      "resourceType": "ACCOUNT",
+      "resourceId": "account-100",
+      "timestamp": "2026-08-15T11:45:00Z",
+      "payload": "{\"status\":\"ACTIVE\"}",
+      "previousHash": "000abc...",
+      "hash": "def456..."
+    }
+  ]
 }
 ```
 
-- Status codes: 200 OK
+### Status codes
+
+- `200 OK`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
 
 ---
 
 ## GET /audit/merkle/root
 
-- Purpose: Compute and return the Merkle root over all record hashes (ordered by sequenceNumber).
-- Sample request:
-```
+Compute the Merkle root for the current set of audit records.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
+- No request body.
+
+### Example request
+
+```http
 GET /audit/merkle/root
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
-- Sample response: 200 OK
-```
+
+### Example response
+
+```json
 {
-  "merkleRoot": "..."
+  "totalRecords": 42,
+  "merkleRoot": "a1b2c3d4...",
+  "generatedAt": "2026-08-15T12:00:00Z"
 }
 ```
 
-- Status codes: 200 OK
+### Status codes
+
+- `200 OK`
+- `401 Unauthorized`
+- `403 Forbidden`
+
+---
+
+## GET /audit/{id}/payload
+
+Return the payload for a specific audit record, optionally as a redacted view.
+
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
+- Path parameter:
+  - `id` (required, positive long)
+- Query parameter:
+  - `redacted` (optional, boolean, default `false`)
+
+### Example request
+
+```http
+GET /audit/100/payload?redacted=true
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+```
+
+### Example response
+
+```json
+{
+  "id": 100,
+  "redacted": true,
+  "payload": "{\"email\":\"REDACTED\"}"
+}
+```
+
+### Status codes
+
+- `200 OK`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
+- `404 Not Found` (if the record is missing)
+- `500 Internal Server Error` (can occur when no record is found)
+
+---
+
+## POST /audit/archive
+
+Run the retention policy and archive expired records.
+
+- Authentication: `ROLE_ADMIN`
+- No request body.
+
+### Example request
+
+```http
+POST /audit/archive
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+```
+
+### Example response
+
+```json
+{
+  "archivedRecords": 5,
+  "message": "Retention policy executed successfully"
+}
+```
+
+### Status codes
+
+- `200 OK`
+- `401 Unauthorized`
+- `403 Forbidden`
+
+---
+
+## POST /audit/redact/{id}
+
+Apply redaction to a record's payload by specifying top-level field names.
+
+- Authentication: `ROLE_ADMIN`
+- Path parameter:
+  - `id` (required, positive long)
+- Request body: `RedactionRequest`
+
+### Request body
+
+```json
+{
+  "fields": ["email", "ssn"]
+}
+```
+
+### Example request
+
+```http
+POST /audit/redact/100
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
+Content-Type: application/json
+```
+
+```json
+{
+  "fields": ["email", "ssn"]
+}
+```
+
+### Example response
+
+```json
+{
+  "id": 100,
+  "redactedPayload": "{\"email\":\"REDACTED\",\"ssn\":\"REDACTED\"}",
+  "message": "Redaction applied"
+}
+```
+
+### Status codes
+
+- `200 OK`
+- `400 Bad Request`
+- `401 Unauthorized`
+- `403 Forbidden`
+- `404 Not Found` (if the record is missing)
+- `500 Internal Server Error` (can occur when no record is found)
 
 ---
 
 ## GET /audit/stats
 
-- Purpose: Return summary statistics about the audit store.
-- Response fields:
-  - totalRecords
-  - activeRecords
-  - archivedRecords
-  - latestSequenceNumber
-  - firstRecordTimestamp
-  - lastRecordTimestamp
+Return aggregate statistics for the audit store.
 
-- Sample request:
-```
+- Authentication: `ROLE_ADMIN`, `ROLE_AUDITOR`
+- No request body.
+
+### Example request
+
+```http
 GET /audit/stats
+Authorization: Basic YWRtaW46YWRtaW4xMjM=
 ```
-- Sample response: 200 OK
-```
+
+### Example response
+
+```json
 {
   "totalRecords": 123,
   "activeRecords": 120,
   "archivedRecords": 3,
   "latestSequenceNumber": 123,
   "firstRecordTimestamp": "2026-01-01T00:00:00Z",
-  "lastRecordTimestamp": "2026-08-10T12:00:00Z"
+  "lastRecordTimestamp": "2026-08-15T12:00:00Z"
 }
 ```
 
-- Status codes: 200 OK
+### Status codes
+
+- `200 OK`
+- `401 Unauthorized`
+- `403 Forbidden`
 
 ---
 
