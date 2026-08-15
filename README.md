@@ -53,6 +53,16 @@ Create a production jar:
 ./mvnw -DskipTests package
 ```
 
+## Authentication
+
+This service is protected with HTTP Basic authentication. Three in-memory users are provided for the assessment:
+
+- admin / adminpass (ROLE_ADMIN)
+- auditor / auditorpass (ROLE_AUDITOR)
+- system / systempass (ROLE_SYSTEM)
+
+Use credentials with curl examples below: e.g. `curl -u auditor:auditorpass ...`
+
 ## Sample HTTP examples
 
 Replace `localhost:8080` with your configured server/port.
