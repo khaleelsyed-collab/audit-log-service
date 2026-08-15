@@ -1,5 +1,8 @@
 # Audit Log Service
 
+Swagger UI: http://localhost:8080/swagger-ui.html
+
+
 A Spring Boot 3.5.6 application built with Java 17 and Maven. This repository is an assessment prototype for a tamper-evident audit log service. It implements append-only audit recording, chain verification, search, retention (soft-archive), structured redaction, export bundles (verifiable via Merkle root), and supporting tooling.
 
 ## Stack

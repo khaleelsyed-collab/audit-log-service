@@ -5,12 +5,24 @@ package com.example.audit.dto;
 /**
  * DTO describing the result of verifying a single audit record.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Result of verifying a single audit record")
 public class RecordVerificationResponse {
 
+    @Schema(description = "Primary identifier of the record", example = "100")
     private Long id;
+
+    @Schema(description = "Whether the stored hash matches the computed hash", example = "true")
     private boolean valid;
+
+    @Schema(description = "Hash stored in the DB", example = "e3b0c442...")
     private String storedHash;
+
+    @Schema(description = "Hash recomputed from stored fields", example = "e3b0c442...")
     private String computedHash;
+
+    @Schema(description = "Descriptive message", example = "Record is valid")
     private String message;
 
     public RecordVerificationResponse() {

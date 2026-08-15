@@ -667,3 +667,45 @@ I manually:
 - Existing unit tests pass.
 - Manual API testing using Basic Authentication.
 - Verified role-based authorization with Admin, Auditor and System users.
+
+### Commit 
+## AI Tool Used
+
+GitHub Copilot
+
+## Purpose
+
+GitHub Copilot was used as a coding assistant to accelerate development and improve code quality.
+
+## Areas Where AI Assisted
+
+- Spring Security configuration
+- Role-based authorization using Spring Security
+- OpenAPI (Swagger) documentation
+- Integration test generation
+- Validation annotations
+- Global exception handling
+- JavaDoc generation
+- General code refactoring
+- Import optimization
+
+## Human Contributions
+
+The project was not generated entirely by AI.
+
+I personally:
+
+- Designed and understood the application structure
+- Reviewed every AI-generated change before accepting it
+- Modified generated code where required
+- Fixed compilation issues
+- Fixed dependency/version compatibility issues
+- Verified endpoint behaviour manually using Postman and Swagger UI
+- Executed and validated all automated tests
+- Ensured the final implementation satisfies the assessment requirements
+
+## Verification
+
+Every AI-generated change was manually reviewed, compiled, executed, and tested before being committed.
+
+AI assistance was used only as a productivity aid. Final implementation decisions, debugging, validation, and testing were performed manually.

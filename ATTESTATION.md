@@ -502,6 +502,102 @@ I manually validated:
 
 Security layer successfully integrated and verified through manual testing
 
+## AI Tool Used
+
+- GitHub Copilot (Visual Studio Code / IntelliJ IDE)
+
+---
+
+## Purpose of AI Usage
+
+GitHub Copilot was used as an AI coding assistant to improve development productivity. It was used to generate implementation suggestions, documentation, and test scaffolding. It was **not used to generate the complete project**.
+
+---
+
+### Commit
+## AI Assisted Areas
+
+Copilot was used to assist with:
+
+- Spring Security configuration
+- Basic Authentication setup
+- Role-based authorization (`@PreAuthorize`)
+- Integration test generation using MockMvc
+- Validation annotations (`jakarta.validation`)
+- Global exception handling (`@RestControllerAdvice`)
+- Swagger / OpenAPI annotations
+- JavaDoc generation
+- Code refactoring suggestions
+- Import optimization
+- Minor code cleanup
+
+---
+
+## Suggestions Accepted
+
+The following AI-generated suggestions were accepted after review:
+
+- Security configuration using Spring Security
+- In-memory user configuration
+- MockMvc integration test templates
+- Validation annotations on DTOs
+- Global exception handler structure
+- Swagger/OpenAPI configuration
+- Controller documentation annotations
+- JavaDoc comments
+- Import cleanup
+
+---
+
+## Suggestions Modified
+
+Several AI-generated suggestions were modified before inclusion:
+
+- Updated endpoint security rules to match assessment requirements.
+- Adjusted role permissions for ADMIN, AUDITOR, and SYSTEM users.
+- Modified generated integration tests to match actual API behaviour.
+- Added missing validation constraints.
+- Improved exception response format.
+- Fixed Swagger configuration to work with the Spring Boot version used in the project.
+- Updated OpenAPI annotations and controller documentation.
+- Renamed variables and methods for consistency with the existing codebase.
+- Reformatted generated code to match the project's coding standards.
+
+---
+
+## Suggestions Rejected
+
+Some AI-generated suggestions were intentionally rejected because they did not align with the assessment requirements or project implementation, including:
+
+- Incorrect security mappings
+- Endpoints that did not exist in the project
+- Unsupported Swagger configuration
+- Unnecessary code duplication
+- Incorrect validation logic
+- Suggested implementations that introduced compilation or compatibility issues
+
+---
+
+## Manual Work Performed
+
+The following work was completed manually:
+
+- Reviewed every AI-generated suggestion before accepting it.
+- Corrected compilation errors.
+- Fixed dependency/version compatibility issues.
+- Integrated generated code into the existing project structure.
+- Tested all endpoints using Postman and Swagger UI.
+- Verified role-based authorization.
+- Verified validation and error handling.
+- Executed all unit and integration tests.
+- Reviewed and cleaned the final code before committing.
+
+---
+
+## Verification
+
+Every AI-generated change was manually reviewed, understood, modified where necessary, compiled, and tested before being committed.
+
 ## Final Implementation Summary (Documentation & Tests)
 
 - Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).

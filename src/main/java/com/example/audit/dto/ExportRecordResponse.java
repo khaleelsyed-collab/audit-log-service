@@ -7,16 +7,36 @@ import java.time.Instant;
  * for review and independent verification. Intentionally omits internal DB-only
  * fields such as primary key id, archival flags, and redaction metadata.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Exportable representation of an audit record")
 public class ExportRecordResponse {
 
+    @Schema(description = "Monotonic sequence number", example = "42")
     private long sequenceNumber;
+
+    @Schema(description = "Type of event", example = "LOGIN")
     private String eventType;
+
+    @Schema(description = "Actor identifier", example = "user-123")
     private String actorId;
+
+    @Schema(description = "Resource type", example = "ACCOUNT")
     private String resourceType;
+
+    @Schema(description = "Resource identifier", example = "account-100")
     private String resourceId;
+
+    @Schema(description = "Event timestamp", example = "2026-08-15T12:00:00Z")
     private Instant timestamp;
+
+    @Schema(description = "Event payload (stringified JSON)", example = "{\"status\":\"ACTIVE\"}")
     private String payload;
+
+    @Schema(description = "Previous record hash", example = "000abc...")
     private String previousHash;
+
+    @Schema(description = "This record's hash", example = "e3b0c442...")
     private String hash;
 
     public ExportRecordResponse() {

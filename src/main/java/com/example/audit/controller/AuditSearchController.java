@@ -17,12 +17,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 /**
  * Controller exposing search APIs for audit records.
  */
 @RestController
 @RequestMapping("/audit")
 @Validated
+@Tag(name = "Audit Search", description = "Search and export audit records")
+@SecurityRequirement(name = "basicAuth")
 public class AuditSearchController {
 
     private final AuditSearchService searchService;
@@ -38,6 +47,14 @@ public class AuditSearchController {
      * Supports pagination via page and size query parameters. Results are always
      * ordered by sequenceNumber ascending.
      */
+    @Operation(summary = "Search audit records")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
     @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR', 'SYSTEM')")
     @GetMapping("/search")
     public ResponseEntity<Page<AuditSearchResponse>> search(

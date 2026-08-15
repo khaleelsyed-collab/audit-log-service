@@ -10,24 +10,32 @@ import java.time.Instant;
  * DTO for incoming audit record creation requests.
  * Validation annotations enforce required fields at the API boundary.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Request to create an audit record")
 public class AuditRecordRequest {
 
+    @Schema(description = "Type of event", example = "LOGIN")
     @NotBlank(message = "eventType is required")
     @Size(max = 128, message = "eventType must be at most 128 characters")
     private String eventType;
 
+    @Schema(description = "Actor identifier performing the event", example = "user-123")
     @NotBlank(message = "actorId is required")
     @Size(max = 128, message = "actorId must be at most 128 characters")
     private String actorId;
 
+    @Schema(description = "Resource type affected by the event", example = "ACCOUNT")
     @NotBlank(message = "resourceType is required")
     @Size(max = 128, message = "resourceType must be at most 128 characters")
     private String resourceType;
 
+    @Schema(description = "Identifier of the resource affected", example = "account-100")
     @NotBlank(message = "resourceId is required")
     @Size(max = 128, message = "resourceId must be at most 128 characters")
     private String resourceId;
 
+    @Schema(description = "Event payload (JSON string)", example = "{\"status\":\"ACTIVE\"}")
     @NotBlank(message = "payload is required")
     @Size(max = 5000, message = "payload must be at most 5000 characters")
     private String payload;

@@ -6,18 +6,42 @@ import java.util.List;
 /**
  * DTO representing a self-contained export bundle for a resource or actor.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Self-contained export bundle for a resource or actor")
 public class ExportBundleResponse {
 
+    @Schema(description = "Actor identifier (if filtered)", example = "user-123")
     private String actorId;
+
+    @Schema(description = "Resource type (if filtered)", example = "ACCOUNT")
     private String resourceType;
+
+    @Schema(description = "Resource identifier (if filtered)", example = "account-100")
     private String resourceId;
+
+    @Schema(description = "Total number of records in the bundle", example = "42")
     private long totalRecords;
+
+    @Schema(description = "First sequence number in the bundle", example = "1")
     private Long firstSequence;
+
+    @Schema(description = "Last sequence number in the bundle", example = "42")
     private Long lastSequence;
+
+    @Schema(description = "Hash of the first record in the bundle", example = "000abc...")
     private String firstHash;
+
+    @Schema(description = "Hash of the last record in the bundle", example = "e3b0c442...")
     private String lastHash;
+
+    @Schema(description = "Computed Merkle root for the bundle", example = "a1b2c3...")
     private String merkleRoot;
+
+    @Schema(description = "Generation timestamp", example = "2026-08-15T12:00:00Z")
     private Instant generatedAt;
+
+    @Schema(description = "Records included in the bundle")
     private List<ExportRecordResponse> records;
 
     public ExportBundleResponse() {

@@ -5,14 +5,30 @@ import java.time.Instant;
 /**
  * DTO for audit search results. Does not expose payload or internal metadata.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Search result entry for an audit record")
 public class AuditSearchResponse {
 
+    @Schema(description = "Monotonic sequence number assigned to the record", example = "42")
     private long sequenceNumber;
+
+    @Schema(description = "Type of event", example = "LOGIN")
     private String eventType;
+
+    @Schema(description = "Actor identifier", example = "user-123")
     private String actorId;
+
+    @Schema(description = "Resource type", example = "ACCOUNT")
     private String resourceType;
+
+    @Schema(description = "Resource identifier", example = "account-100")
     private String resourceId;
+
+    @Schema(description = "Timestamp of the event", example = "2026-08-15T12:00:00Z")
     private Instant timestamp;
+
+    @Schema(description = "Hash of the record", example = "e3b0c442...")
     private String hash;
 
     public AuditSearchResponse() {

@@ -5,10 +5,18 @@ import java.time.Instant;
 /**
  * DTO representing the Merkle root computation result.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Merkle root computation result summary")
 public class MerkleRootResponse {
 
+    @Schema(description = "Total number of records considered", example = "123")
     private int totalRecords;
+
+    @Schema(description = "Computed Merkle root (hex)", example = "a1b2c3d4...")
     private String merkleRoot;
+
+    @Schema(description = "Timestamp when the root was generated", example = "2026-08-15T12:00:00Z")
     private Instant generatedAt;
 
     public MerkleRootResponse() {

@@ -11,12 +11,21 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 /**
  * Controller exposing an export endpoint for audit records.
  */
 @RestController
 @RequestMapping("/audit")
 @Validated
+@Tag(name = "Export", description = "Export audit records")
+@SecurityRequirement(name = "basicAuth")
 public class AuditExportController {
 
     private final AuditExportService exportService;
@@ -32,12 +41,20 @@ public class AuditExportController {
      * This endpoint is read-only and does not modify any data.
      */
 
+    @Operation(summary = "Export audit records", description = "Export audit records filtered by actor/resource and packaged with verification metadata.")
+    @ApiResponses({
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "Bad Request"),
+            @ApiResponse(responseCode = "401", description = "Unauthorized"),
+            @ApiResponse(responseCode = "403", description = "Forbidden"),
+            @ApiResponse(responseCode = "404", description = "Not Found")
+    })
     @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/export")
     public ResponseEntity<ExportBundleResponse> exportAll(
-            @RequestParam(required = false) @Size(max = 128, message = "actorId must be at most 128 characters") String actorId,
-            @RequestParam(required = false) @Size(max = 128, message = "resourceType must be at most 128 characters") String resourceType,
-            @RequestParam(required = false) @Size(max = 128, message = "resourceId must be at most 128 characters") String resourceId
+            @Parameter(description = "Filter by actorId", example = "user-123") @RequestParam(required = false) @Size(max = 128, message = "actorId must be at most 128 characters") String actorId,
+            @Parameter(description = "Filter by resourceType", example = "ACCOUNT") @RequestParam(required = false) @Size(max = 128, message = "resourceType must be at most 128 characters") String resourceType,
+            @Parameter(description = "Filter by resourceId", example = "account-100") @RequestParam(required = false) @Size(max = 128, message = "resourceId must be at most 128 characters") String resourceId
     ) {
 
         ExportBundleResponse bundle =

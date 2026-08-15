@@ -10,8 +10,12 @@ import java.util.List;
 /**
  * Request DTO specifying top-level fields to redact from a record's payload.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Request listing fields to redact from an audit record payload")
 public class RedactionRequest {
 
+    @Schema(description = "Top-level JSON fields to redact", example = "[\"email\", \"ssn\"]")
     @NotNull(message = "fields is required")
     @NotEmpty(message = "fields must not be empty")
     @Size(min = 1, max = 20, message = "fields must contain between 1 and 20 entries")

@@ -3,8 +3,14 @@ package com.example.audit.dto;
 /**
  * Response DTO for archive operation.
  */
+import io.swagger.v3.oas.annotations.media.Schema;
+
+@Schema(description = "Response returned after running the retention/archive policy")
 public class ArchiveResponse {
+    @Schema(description = "Number of records archived", example = "5")
     private int archivedRecords;
+
+    @Schema(description = "Operation message", example = "Retention policy executed successfully")
     private String message;
 
     public ArchiveResponse() {

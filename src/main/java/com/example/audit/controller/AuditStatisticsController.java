@@ -7,11 +7,16 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import io.swagger.v3.oas.annotations.tags.Tag;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
+
 /**
  * Controller exposing audit statistics endpoints.
  */
 @RestController
 @RequestMapping("/audit")
+@Tag(name = "Statistics", description = "Audit statistics endpoints")
+@SecurityRequirement(name = "basicAuth")
 public class AuditStatisticsController {
 
     private final AuditStatisticsService statisticsService;
