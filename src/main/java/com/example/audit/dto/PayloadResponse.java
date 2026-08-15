@@ -1,4 +1,4 @@
-package com.example.audit.controller;
+package com.example.audit.dto;
 
 /**
  * DTO representing a payload retrieval response. Indicates whether the payload

@@ -6,7 +6,7 @@ import com.example.audit.specification.AuditRecordSpecification;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-import com.example.audit.controller.AuditSearchResponse;
+import com.example.audit.dto.AuditSearchResponse;
 
 /**
  * Service providing search functionality for audit records using dynamic Specifications.

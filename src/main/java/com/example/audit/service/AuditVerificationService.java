@@ -6,7 +6,7 @@ import com.example.audit.util.CanonicalRecordUtil;
 import com.example.audit.util.HashUtil;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-import com.example.audit.controller.ChainVerificationResponse;
+import com.example.audit.dto.ChainVerificationResponse;
 
 import java.util.List;
 
@@ -69,12 +69,12 @@ public class AuditVerificationService {
 
             if (!recomputedHash.equals(record.getHash())) {
                 String msg = String.format("Recomputed hash mismatch at sequence %d", record.getSequenceNumber());
-                return new com.example.audit.controller.ChainVerificationResponse(false, record.getSequenceNumber(), "HASH_MISMATCH", msg);
+                return new ChainVerificationResponse(false, record.getSequenceNumber(), "HASH_MISMATCH", msg);
             }
 
             if (!record.getPreviousHash().equals(expectedPreviousHash)) {
                 String msg = String.format("Previous hash mismatch at sequence %d: expected=%s stored=%s", record.getSequenceNumber(), expectedPreviousHash, record.getPreviousHash());
-                return new com.example.audit.controller.ChainVerificationResponse(false, record.getSequenceNumber(), "PREVIOUS_HASH_MISMATCH", msg);
+                return new ChainVerificationResponse(false, record.getSequenceNumber(), "PREVIOUS_HASH_MISMATCH", msg);
             }
 
             // advance expected previous hash to this record's stored hash

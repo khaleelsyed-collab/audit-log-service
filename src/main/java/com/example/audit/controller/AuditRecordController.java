@@ -6,13 +6,19 @@ import com.example.audit.dto.AuditRecordSearchResponse;
 import com.example.audit.entity.AuditRecord;
 import com.example.audit.service.AuditRecordService;
 import jakarta.validation.Valid;
+
+import java.net.URI;
+import java.time.Instant;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.net.URI;
 
 /**
  * REST controller exposing endpoints to create audit records.
@@ -66,27 +72,38 @@ public class AuditRecordController {
      * Search API for audit records with optional filters and pagination.
      * GET /audit
      */
-    @org.springframework.web.bind.annotation.GetMapping
-    public ResponseEntity<org.springframework.data.domain.Page<AuditRecordSearchResponse>> search(
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String actorId,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String resourceType,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String resourceId,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) String eventType,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) java.time.Instant from,
-            @org.springframework.web.bind.annotation.RequestParam(required = false) java.time.Instant to,
-            org.springframework.data.domain.Pageable pageable
+    @GetMapping
+    public ResponseEntity<Page<AuditRecordSearchResponse>> search(
+            @RequestParam(required = false) String actorId,
+            @RequestParam(required = false) String resourceType,
+            @RequestParam(required = false) String resourceId,
+            @RequestParam(required = false) String eventType,
+            @RequestParam(required = false) Instant from,
+            @RequestParam(required = false) Instant to,
+            Pageable pageable
     ) {
-        org.springframework.data.domain.Page<com.example.audit.entity.AuditRecord> page = service.search(actorId, resourceType, resourceId, eventType, from, to, pageable);
-        org.springframework.data.domain.Page<AuditRecordSearchResponse> dtoPage = page.map(r -> new AuditRecordSearchResponse(
-                r.getId(),
-                r.getSequenceNumber(),
-                r.getEventType(),
-                r.getActorId(),
-                r.getResourceType(),
-                r.getResourceId(),
-                r.getTimestamp(),
-                r.getHash()
-        ));
+        Page<AuditRecord> page = service.search(
+                actorId,
+                resourceType,
+                resourceId,
+                eventType,
+                from,
+                to,
+                pageable
+        );
+
+        Page<AuditRecordSearchResponse> dtoPage = page.map(r ->
+                new AuditRecordSearchResponse(
+                        r.getId(),
+                        r.getSequenceNumber(),
+                        r.getEventType(),
+                        r.getActorId(),
+                        r.getResourceType(),
+                        r.getResourceId(),
+                        r.getTimestamp(),
+                        r.getHash()
+                ));
+
         return ResponseEntity.ok(dtoPage);
     }
 }

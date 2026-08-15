@@ -447,3 +447,54 @@ Features:
 - Export preserves sequence order.
 - Merkle root is generated from exported record hashes.
 - Read-only implementation with no impact to existing hash-chain verification.
+
+## Commit 19 
+
+AI assistance (GitHub Copilot and ChatGPT) was used to generate implementation suggestions.
+
+All generated code was:
+
+- reviewed manually
+- modified where required
+- compiled successfully
+- validated using REST endpoints
+- committed only after verification
+
+Examples of manual review:
+
+- Modified export filters to support resourceType + resourceId
+- Reused existing MerkleTreeService instead of duplicating logic
+- Preserved existing hashing implementation
+- Verified pagination behaviour
+
+## Final Implementation Summary (Documentation & Tests)
+
+- Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).
+- Search pagination: Enhanced `/audit/search` to support `page` and `size` query parameters and return a `Page<AuditSearchResponse>` ordered by `sequenceNumber`.
+- Documentation updates: README expanded with prerequisites, run/build instructions, and sample curl commands. Added `docs/SCENARIO_C.md` and expanded `docs/API.md`.
+- Tests: Added automated JUnit 5 tests covering append operations, hash chain generation, full chain verification, single-record verification, search filters and pagination, archive operation, redaction operation, export bundle generation, merkle root computation, and statistics aggregation.
+
+## Manual validation performed
+
+- Built project: `./mvnw -DskipTests package`
+- Ran test suite: `./mvnw test` (tests use embedded H2 database)
+- Manually exercised critical endpoints with curl and verified expected responses: POST /audit, GET /audit/search, GET /audit/verify, GET /audit/verify/{id}, POST /audit/archive, POST /audit/redact/{id}, GET /audit/export, GET /audit/merkle/root, GET /audit/stats
+
+## Engineering decisions
+
+- Maintained all existing hashing, verification, archive, and Merkle logic. No changes were made to cryptographic or verification algorithms.
+- Tests are written to validate external behaviors (API contracts and service outputs) and rely on the same utilities used in production code so they remain accurate with implementation.
+- For verification semantics concerning archived records, the system continues to store records as archived (soft-delete) and verification continues to consider archived records as part of the chain; this approach preserves full historical tamper-evidence. Alternate policies (skip archived ranges) are documented in `docs/SCENARIO_C.md`.
+
+## AI usage review
+
+- AI was used extensively to accelerate boilerplate code generation (services, DTOs, controllers) and to draft test scaffolding and documentation.
+- Every AI-generated suggestion was reviewed and either accepted, modified, or rejected by the engineer; modifications and rationale are recorded in `docs/AI_USAGE.md`.
+- No AI-generated code was merged without manual validation, unit/integration testing and engineer sign-off.
+
+**Engineer Sign-off**
+
+I attest that the work integrated in this repository is my own, and that I have documented AI usage and review decisions as required by the assessment.
+
+Khaleel Syed
+- Verified search filters

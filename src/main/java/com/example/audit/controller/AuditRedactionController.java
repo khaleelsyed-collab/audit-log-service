@@ -1,5 +1,7 @@
 package com.example.audit.controller;
 
+import com.example.audit.dto.RedactionRequest;
+import com.example.audit.dto.RedactionResponse;
 import com.example.audit.service.AuditRedactionService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;

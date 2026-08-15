@@ -1,4 +1,4 @@
-package com.example.audit.controller;
+package com.example.audit.dto;
 
 /**
  * Response DTO for redaction operations.

@@ -1,7 +1,7 @@
 package com.example.audit.service;
 
-import com.example.audit.controller.ExportBundleResponse;
-import com.example.audit.controller.ExportRecordResponse;
+import com.example.audit.dto.ExportBundleResponse;
+import com.example.audit.dto.ExportRecordResponse;
 import com.example.audit.entity.AuditRecord;
 import com.example.audit.repository.AuditRecordRepository;
 import org.springframework.stereotype.Service;

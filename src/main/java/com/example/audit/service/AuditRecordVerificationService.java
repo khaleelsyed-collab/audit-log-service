@@ -5,7 +5,7 @@ import com.example.audit.repository.AuditRecordRepository;
 import com.example.audit.util.CanonicalRecordUtil;
 import com.example.audit.util.HashUtil;
 import org.springframework.stereotype.Service;
-import com.example.audit.controller.RecordVerificationResponse;
+import com.example.audit.dto.RecordVerificationResponse;
 
 /**
  * Service to verify a single audit record's integrity by recomputing its hash

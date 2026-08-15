@@ -1,5 +1,6 @@
 package com.example.audit.controller;
 
+import com.example.audit.dto.MerkleRootResponse;
 import com.example.audit.service.MerkleTreeService;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

@@ -1,5 +1,6 @@
 package com.example.audit.controller;
 
+import com.example.audit.dto.AuditSearchResponse;
 import com.example.audit.service.AuditSearchService;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -28,7 +29,8 @@ public class AuditSearchController {
      * GET /audit/search
      *
      * Supports optional filters: actorId, eventType, resourceType, resourceId.
-     * Pagination and sorting supported via page, size, sortBy and direction parameters.
+     * Supports pagination via page and size query parameters. Results are always
+     * ordered by sequenceNumber ascending.
      */
     @GetMapping("/search")
     public ResponseEntity<Page<AuditSearchResponse>> search(
@@ -37,12 +39,9 @@ public class AuditSearchController {
             @RequestParam(value = "resourceType", required = false) String resourceType,
             @RequestParam(value = "resourceId", required = false) String resourceId,
             @RequestParam(value = "page", required = false, defaultValue = "0") int page,
-            @RequestParam(value = "size", required = false, defaultValue = "10") int size,
-            @RequestParam(value = "sortBy", required = false, defaultValue = "sequenceNumber") String sortBy,
-            @RequestParam(value = "direction", required = false, defaultValue = "ASC") String direction
+            @RequestParam(value = "size", required = false, defaultValue = "10") int size
     ) {
-        Sort.Direction dir = Sort.Direction.fromString(direction);
-        Pageable pageable = PageRequest.of(page, size, Sort.by(dir, sortBy));
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "sequenceNumber"));
         Page<AuditSearchResponse> results = searchService.search(actorId, eventType, resourceType, resourceId, pageable);
         return ResponseEntity.ok(results);
     }

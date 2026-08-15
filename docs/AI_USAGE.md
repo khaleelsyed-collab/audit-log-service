@@ -520,3 +520,120 @@ The generated code was reviewed, compiled, manually tested, and adjusted before 
 - Verified actor and resource filters.
 - Verified bundle includes first/last hashes and Merkle root.
 - Confirmed read-only implementation.
+
+### Commit 19 - Pagination feature
+
+## Feature
+Export Verifiable Audit Bundle
+
+### Prompt
+Implemented a verifiable export bundle supporting optional actorId, resourceType and resourceId filters.
+The bundle should include metadata, exported records, and a Merkle root while reusing the existing Merkle implementation.
+Do not modify hashing, archive, verification or redaction logic.
+
+### AI Response Summary
+GitHub Copilot suggested:
+- ExportBundleResponse DTO
+- AuditExportController updates
+- AuditExportService implementation
+- Reuse of MerkleTreeService
+- Repository methods for filtered export
+
+### Review Performed
+Reviewed every generated class and verified:
+- Constructor injection
+- Existing endpoints were not broken
+- Merkle computation reused existing implementation
+- Export ordering preserved by sequenceNumber
+- Read-only behaviour maintained
+
+### Changes Accepted
+- ExportBundleResponse DTO
+- Reuse of MerkleTreeService
+- Controller implementation
+- Service implementation
+- Export metadata generation
+
+### Changes Modified
+Changed export filtering to support:
+
+- actorId
+- resourceType + resourceId
+
+instead of only actorId/resourceId.
+
+Updated repository accordingly.
+
+### Changes Rejected
+Did not use:
+- actorId precedence logic
+- resourceId-only filtering
+
+Implemented resourceType + resourceId filtering to match assessment requirements.
+
+### Validation
+Manually tested:
+
+- GET /audit/export
+- GET /audit/export?actorId=khaleel
+- GET /audit/export?resourceType=USER&resourceId=123
+
+Verified:
+
+- exported records
+- Merkle root
+- metadata
+- ordering
+
+## Commit 20 - Documentation & Tests (Latest)
+
+**Purpose**
+
+Finalize documentation updates (README, API reference, Scenario C) and add automated tests covering core services for the final submission.
+
+**AI Tool Used**
+
+GitHub Copilot + ChatGPT
+
+**Prompts Given to AI**
+
+- Generate README additions: prerequisites, run instructions, sample curl examples.
+- Create concise SCENARIO_C.md explaining compliance reporting ambiguities, assumptions and design decisions.
+- Expand API.md to document all endpoints with examples and status codes.
+- Append the latest AI usage notes to AI_USAGE.md and ATTESTATION.md.
+- Generate JUnit 5 + Mockito test classes for services: AuditRecordService, AuditVerificationService, AuditExportService, AuditSearchService, AuditArchiveService, AuditRedactionService.
+
+**AI Response Summary**
+
+The AI produced draft documentation text and suggested test scaffolding. For tests it suggested a mix of unit tests with Mockito and light-weight integration tests using @SpringBootTest and an embedded database.
+
+**What was accepted**
+
+- README additions (prerequisites, run, build, sample curl commands).
+- SCENARIO_C.md concise design and assumptions.
+- API.md expanded endpoint documentation.
+- AI usage log entries documenting these steps.
+- A set of tests that exercise append, verification, search (filters + pagination), export bundle, merkle root, archive and redaction operations using the application context and an embedded DB.
+
+**What was modified**
+
+- Tests were adapted to use `@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.ANY)` so they run against an in-memory H2 instance regardless of the default datasource.
+- Test data creation was centralized within each test to keep tests independent and readable.
+- Assertions were written to verify high-level contract behavior (sequence numbers, hash presence, chain intact/broken, export metadata and merkle root) rather than internal implementation details.
+
+**What was rejected**
+
+- Any AI suggestion that modified hashing or verification logic.
+- Suggestion to change REST contracts or database schema.
+
+**Engineer Reasoning**
+
+- Documentation and tests demonstrate the acceptance criteria for the assessment and provide reproducible steps for reviewers to run and validate the system locally.
+- Tests rely on the same hashing and Merkle helpers used in production code to ensure exported bundle integrity checks are aligned with the runtime behavior.
+
+**Validation Performed**
+
+- Ran `./mvnw -DskipTests package` to build the project.
+- Executed `./mvnw test` to run the new unit and integration tests locally (tests use embedded DB).
+- Manually exercised key endpoints with curl where necessary to validate examples used in the README.
+

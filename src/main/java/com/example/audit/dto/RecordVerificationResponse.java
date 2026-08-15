@@ -1,6 +1,6 @@
 
 
-package com.example.audit.controller;
+package com.example.audit.dto;
 
 /**
  * DTO describing the result of verifying a single audit record.

@@ -4,7 +4,7 @@ import com.example.audit.entity.AuditRecord;
 import com.example.audit.repository.AuditRecordRepository;
 import com.example.audit.util.HashUtil;
 import org.springframework.stereotype.Service;
-import com.example.audit.controller.MerkleRootResponse;
+import com.example.audit.dto.MerkleRootResponse;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,7 +48,7 @@ public class MerkleTreeService {
         }
 
         String merkleRoot = computeMerkleRootFromHashes(leaves);
-        return new com.example.audit.controller.MerkleRootResponse(total, merkleRoot, generatedAt);
+        return new MerkleRootResponse(total, merkleRoot, generatedAt);
     }
 
     /**
