@@ -13,6 +13,7 @@ import java.time.Instant;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -44,6 +45,7 @@ public class AuditRecordController {
      * Exception handling and input sanitization are intentionally left for
      * later tasks.
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'SYSTEM')")
     @PostMapping
     public ResponseEntity<AuditRecordResponse> create(@Valid @RequestBody AuditRecordRequest request) {
         AuditRecord saved = service.appendRecord(
@@ -72,6 +74,7 @@ public class AuditRecordController {
      * Search API for audit records with optional filters and pagination.
      * GET /audit
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR', 'SYSTEM')")
     @GetMapping
     public ResponseEntity<Page<AuditRecordSearchResponse>> search(
             @RequestParam(required = false) String actorId,

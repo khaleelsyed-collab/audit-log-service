@@ -3,6 +3,7 @@ package com.example.audit.controller;
 import com.example.audit.dto.MerkleRootResponse;
 import com.example.audit.service.MerkleTreeService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,6 +26,7 @@ public class AuditMerkleController {
      *
      * Computes the Merkle root over stored record.hash values and returns a summary.
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/merkle/root")
     public ResponseEntity<MerkleRootResponse> getMerkleRoot() {
         MerkleRootResponse resp = merkleTreeService.computeMerkleRoot();

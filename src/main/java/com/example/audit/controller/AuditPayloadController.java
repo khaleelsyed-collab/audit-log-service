@@ -3,6 +3,7 @@ package com.example.audit.controller;
 import com.example.audit.dto.PayloadResponse;
 import com.example.audit.service.AuditPayloadViewService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -29,6 +30,7 @@ public class AuditPayloadController {
      * @param redacted optional query param; if true, return redacted payload if available
      * @return PayloadResponse with the selected payload
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/{id}/payload")
     public ResponseEntity<PayloadResponse> getPayload(
             @PathVariable("id") Long id,

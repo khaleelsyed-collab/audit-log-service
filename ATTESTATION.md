@@ -466,6 +466,41 @@ Examples of manual review:
 - Reused existing MerkleTreeService instead of duplicating logic
 - Preserved existing hashing implementation
 - Verified pagination behaviour
+### Feature
+Spring Security Authentication and Role-Based Authorization
+
+### Summary
+
+Implemented application security using Spring Security.
+
+Completed:
+
+- HTTP Basic Authentication
+- BCrypt password encoding
+- Stateless session management
+- In-memory user store
+- Role-based authorization
+- Method-level security using @PreAuthorize
+
+### AI Usage
+
+GitHub Copilot assisted with the initial implementation of the security configuration and authorization annotations.
+
+### Human Verification
+
+I reviewed all generated code before accepting changes.
+
+I manually validated:
+
+- Successful application startup
+- Authentication (401 responses)
+- Authorization (403 responses)
+- Authorized access for valid roles
+- Existing application functionality remained intact
+
+### Result
+
+Security layer successfully integrated and verified through manual testing
 
 ## Final Implementation Summary (Documentation & Tests)
 

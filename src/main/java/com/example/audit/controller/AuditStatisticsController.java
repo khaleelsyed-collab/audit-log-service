@@ -2,6 +2,7 @@ package com.example.audit.controller;
 
 import com.example.audit.service.AuditStatisticsService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -24,6 +25,7 @@ public class AuditStatisticsController {
      *
      * Returns aggregated statistics about audit records.
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/stats")
     public ResponseEntity<AuditStatisticsResponse> stats() {
         AuditStatisticsResponse resp = statisticsService.getStatistics();

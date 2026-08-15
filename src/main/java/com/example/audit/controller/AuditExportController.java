@@ -4,6 +4,7 @@ import com.example.audit.dto.ExportBundleResponse;
 import com.example.audit.service.AuditExportService;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -29,6 +30,7 @@ public class AuditExportController {
      * This endpoint is read-only and does not modify any data.
      */
 
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/export")
     public ResponseEntity<ExportBundleResponse> exportAll(
             @RequestParam(required = false) String actorId,

@@ -3,6 +3,7 @@ package com.example.audit.controller;
 import com.example.audit.dto.ArchiveResponse;
 import com.example.audit.service.AuditArchiveService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -23,6 +24,7 @@ public class AuditArchiveController {
     /**
      * POST /audit/archive - execute retention policy and soft-archive expired records.
      */
+    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/archive")
     public ResponseEntity<ArchiveResponse> archive() {
         int archived = archiveService.archiveExpiredRecords();

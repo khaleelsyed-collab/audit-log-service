@@ -2,7 +2,6 @@ package com.example.audit.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.Customizer;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -63,13 +62,6 @@ public class SecurityConfig {
                 .csrf(csrf -> csrf.disable())
                 .sessionManagement(sm -> sm.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests(auth -> auth
-                        // Allow GETs to authenticated roles
-                        .requestMatchers(HttpMethod.GET, "/**").hasAnyRole("AUDITOR", "ADMIN", "SYSTEM")
-                        // Allow creating audit records to system/admin
-                        .requestMatchers(HttpMethod.POST, "/audit").hasAnyRole("SYSTEM", "ADMIN")
-                        // Archive and redaction require ADMIN
-                        .requestMatchers(HttpMethod.POST, "/audit/archive", "/audit/redact/**").hasRole("ADMIN")
-                        // Any other request requires authentication
                         .anyRequest().authenticated()
                 )
                 .httpBasic(Customizer.withDefaults());

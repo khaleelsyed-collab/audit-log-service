@@ -3,6 +3,7 @@ package com.example.audit.controller;
 import com.example.audit.dto.RecordVerificationResponse;
 import com.example.audit.service.AuditRecordVerificationService;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -26,6 +27,7 @@ public class AuditRecordVerificationController {
      *
      * Verify a single audit record's stored hash by recomputing it.
      */
+    @PreAuthorize("hasAnyRole('ADMIN', 'AUDITOR')")
     @GetMapping("/{id}")
     public ResponseEntity<RecordVerificationResponse> verify(@PathVariable("id") Long id) {
         RecordVerificationResponse resp = verificationService.verifyRecord(id);

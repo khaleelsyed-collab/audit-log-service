@@ -637,3 +637,33 @@ The AI produced draft documentation text and suggested test scaffolding. For tes
 - Executed `./mvnw test` to run the new unit and integration tests locally (tests use embedded DB).
 - Manually exercised key endpoints with curl where necessary to validate examples used in the README.
 
+### Objective
+Implement authentication and role-based authorization to secure the audit log REST APIs according to the assessment requirements.
+
+### AI Assistance
+GitHub Copilot was used to:
+
+- Generate an initial Spring Security configuration.
+- Configure HTTP Basic Authentication.
+- Create three in-memory users (ADMIN, AUDITOR, SYSTEM).
+- Generate BCrypt password encoding configuration.
+- Add @PreAuthorize annotations to controller endpoints.
+- Suggest role mappings for REST APIs.
+- Generate JavaDoc comments for new security configuration.
+
+### Human Review & Changes
+I manually:
+
+- Reviewed all generated security code.
+- Verified authentication using Postman.
+- Tested unauthorized (401) and forbidden (403) scenarios.
+- Adjusted endpoint role mappings to match the required access policy.
+- Confirmed application startup and existing tests passed after the changes.
+
+### Validation Performed
+
+- Application starts successfully.
+- Maven build successful.
+- Existing unit tests pass.
+- Manual API testing using Basic Authentication.
+- Verified role-based authorization with Admin, Auditor and System users.
