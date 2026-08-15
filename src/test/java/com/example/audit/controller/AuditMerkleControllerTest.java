@@ -37,6 +37,14 @@ class AuditMerkleControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "AUDITOR")
+    void auditorCanGetMerkleRoot() throws Exception {
+        mockMvc.perform(get("/audit/merkle/root"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.merkleRoot").isString());
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     void adminCanGetMerkleRoot() throws Exception {
         // create several records so merkle root can be computed

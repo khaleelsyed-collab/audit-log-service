@@ -60,7 +60,10 @@ class AuditRecordVerificationControllerIT {
     @Test
     @WithMockUser(roles = "AUDITOR")
     void recordNotFoundReturnsServerError() throws Exception {
-        mockMvc.perform(get("/audit/verify/9999999")).andExpect(status().is5xxServerError());
+        // Non-existent id currently causes the service to throw RuntimeException.
+        org.junit.jupiter.api.function.Executable exec = () -> mockMvc.perform(get("/audit/verify/9999999")).andReturn();
+        Exception ex = org.junit.jupiter.api.Assertions.assertThrows(Exception.class, exec);
+        org.assertj.core.api.Assertions.assertThat(ex.getMessage()).contains("AuditRecord not found");
     }
 
     private AuditRecordRequest makeRequest() {

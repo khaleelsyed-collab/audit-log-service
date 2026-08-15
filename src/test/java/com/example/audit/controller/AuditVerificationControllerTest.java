@@ -60,6 +60,16 @@ class AuditVerificationControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(username = "system", roles = "SYSTEM")
+    void systemCannotVerifyRecords() throws Exception {
+        mockMvc.perform(get("/audit/verify"))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/audit/verify/1"))
+                .andExpect(status().isForbidden());
+    }
+
     private long createAuditRecord() throws Exception {
         AuditRecordRequest request = new AuditRecordRequest();
         request.setEventType("LOGIN");

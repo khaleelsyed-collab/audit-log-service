@@ -74,6 +74,18 @@ class AuditRecordControllerTest {
                 .andExpect(status().isOk());
     }
 
+    @Test
+    @WithMockUser(username = "viewer", roles = "USER")
+    void unauthorizedRoleCannotCreateOrSearchAuditRecords() throws Exception {
+        mockMvc.perform(post("/audit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(validRequest())))
+                .andExpect(status().isForbidden());
+
+        mockMvc.perform(get("/audit"))
+                .andExpect(status().isForbidden());
+    }
+
     private AuditRecordRequest validRequest() {
         AuditRecordRequest request = new AuditRecordRequest();
         request.setEventType("LOGIN");

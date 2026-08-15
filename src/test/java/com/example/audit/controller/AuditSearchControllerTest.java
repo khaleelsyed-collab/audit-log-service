@@ -52,4 +52,11 @@ class AuditSearchControllerTest {
         mockMvc.perform(get("/audit/export"))
                 .andExpect(status().isForbidden());
     }
+
+    @Test
+    @WithMockUser(username = "viewer", roles = "USER")
+    void unauthorizedRoleCannotSearch() throws Exception {
+        mockMvc.perform(get("/audit/search"))
+                .andExpect(status().isForbidden());
+    }
 }

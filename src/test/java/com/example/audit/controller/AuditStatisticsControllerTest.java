@@ -37,6 +37,14 @@ class AuditStatisticsControllerTest {
     }
 
     @Test
+    @WithMockUser(roles = "AUDITOR")
+    void auditorCanGetStats() throws Exception {
+        mockMvc.perform(get("/audit/stats"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.totalRecords").isNumber());
+    }
+
+    @Test
     @WithMockUser(roles = "ADMIN")
     void adminCanGetStats() throws Exception {
         AuditRecordRequest r = makeRequest();

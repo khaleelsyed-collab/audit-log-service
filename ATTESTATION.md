@@ -624,6 +624,13 @@ Every AI-generated change was manually reviewed, understood, modified where nece
 - Production code changes were verified by executing the complete test suite.
 - Final implementation decisions, concurrency approach and documentation accuracy were made by the engineer.
 
+### Recent AI-Assisted Work
+
+- AI assisted in generating authentication and authorization test cases.
+- All generated tests were manually reviewed and corrected where necessary.
+- Failing AI-generated tests were adjusted to match the implemented application behavior.
+- Final validation was performed by executing the complete Maven test suite successfully.
+
 ## Final Implementation Summary (Documentation & Tests)
 
 - Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).

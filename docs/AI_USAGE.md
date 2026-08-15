@@ -754,3 +754,13 @@ AI assistance was used only as a productivity aid. Final implementation decision
 | AI Response | Suggested documentation improvements, endpoint descriptions and assessment clarifications. |
 | Engineer Decision | Reviewed and edited all documentation to match the implemented application before updating. |
 | Trade-off | Documentation reflects the current implementation only; future enhancements are documented separately. |
+
+## Session: Security Authorization Testing
+
+| Item | Details |
+|------|---------|
+| Feature | Authentication and authorization test coverage |
+| AI Tool Used | Cursor AI |
+| AI Response | Generated 401/403 authorization tests for controller endpoints. |
+| Engineer Decision | Reviewed, corrected failing integration tests, and verified the complete test suite before accepting changes. |
+| Trade-off | Existing application behavior was preserved; tests were aligned with implementation instead of modifying production code. |

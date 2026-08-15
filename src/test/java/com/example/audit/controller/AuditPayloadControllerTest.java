@@ -38,6 +38,24 @@ class AuditPayloadControllerTest {
 
     @Test
     @WithMockUser(roles = "ADMIN")
+    void adminCanRetrievePayload() throws Exception {
+        AuditRecordRequest req = makeRequest();
+        String create = mockMvc.perform(post("/audit")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(objectMapper.writeValueAsString(req)))
+                .andExpect(status().isCreated())
+                .andReturn().getResponse().getContentAsString();
+
+        Long id = objectMapper.readTree(create).get("id").asLong();
+
+        mockMvc.perform(get("/audit/" + id + "/payload"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(id))
+                .andExpect(jsonPath("$.payload").isNotEmpty());
+    }
+
+    @Test
+    @WithMockUser(roles = "ADMIN")
     void postWithoutProperRoleForPayloadAccess() throws Exception {
         // create a record as ADMIN (allowed) then try to access payload as SYSTEM (forbidden)
         AuditRecordRequest req = makeRequest();
