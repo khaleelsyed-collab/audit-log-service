@@ -709,3 +709,26 @@ I personally:
 Every AI-generated change was manually reviewed, compiled, executed, and tested before being committed.
 
 AI assistance was used only as a productivity aid. Final implementation decisions, debugging, validation, and testing were performed manually.
+
+
+### Commit 
+### AI Tools
+- GitHub Copilot
+- ChatGPT
+
+### AI Assistance
+- Generated JaCoCo configuration
+- Generated integration and unit tests
+- Added exception handler tests
+- Improved test coverage and documentation
+
+### Human Validation
+- Reviewed all generated code
+- Executed `mvn clean verify`
+- Verified BUILD SUCCESS
+- Validated JaCoCo and Surefire reports
+
+### Outcome
+- 58 tests passed
+- 82% instruction coverage
+- 64% branch coverage

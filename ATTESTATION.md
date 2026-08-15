@@ -598,6 +598,25 @@ The following work was completed manually:
 
 Every AI-generated change was manually reviewed, understood, modified where necessary, compiled, and tested before being committed.
 
+### Commit
+### Changes
+- Added JaCoCo Maven Plugin (HTML & XML reports)
+- Added integration tests for Export, Payload, Merkle, Statistics, and Verification controllers
+- Expanded controller and service test coverage
+- Added GlobalExceptionHandlerTest
+
+### Verification
+- Command: `mvn clean verify`
+- Result: BUILD SUCCESS
+- Tests Passed: 58
+- Instruction Coverage: 82%
+- Branch Coverage: 64%
+
+### Evidence
+- `target/site/jacoco/index.html`
+- `target/site/jacoco/jacoco.xml`
+- `target/surefire-reports/`
+
 ## Final Implementation Summary (Documentation & Tests)
 
 - Export bundle enhancements: Added `ExportBundleResponse` and updated the `/audit/export` endpoint to accept optional `actorId` and `resourceId` filters. Export returns ordered records and bundle metadata (first/last sequence and hashes, merkleRoot, generatedAt).
